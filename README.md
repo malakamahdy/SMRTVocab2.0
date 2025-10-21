@@ -1,2 +1,2 @@
-# SMRTVocab2.0
+# SMRT Vocab 2.0
 Senior Capstone Project
