@@ -1,9 +1,7 @@
-import { LoginModal } from '@/app/components/LoginModal'
-
-const LandingPage = () => {
+export default function LandingPage() {
     return (
         <div>
-            <LoginModal />
+            Landing Page
         </div>
     )
 }
