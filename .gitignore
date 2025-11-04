@@ -1,0 +1,65 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# User data files
+backend/AccountInformation.csv
+backend/UserWords/*_*.csv
+!backend/UserWords/Template_*.csv
+
+# Generated audio files
+backend/audio_files/**/*.mp3
+
+# Logs
+*.log
+smrt.log
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Node
+frontend/node_modules/
+frontend/.next/
+frontend/out/
+frontend/.vite/
+
+# Environment variables
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# SMRT-PROJECT (if it's a submodule or shouldn't be committed)
+# Uncomment if needed:
+# SMRT-PROJECT/
+
