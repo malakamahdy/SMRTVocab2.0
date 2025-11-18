@@ -117,6 +117,34 @@ export const api = {
       body: JSON.stringify({ word, language })
     });
     return response.json();
+  },
+  
+  // Reading/Guided Reading
+  getCurrentWords: async (sessionId) => {
+    const response = await fetch(`${API_BASE_URL}/study/get-current-words`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ session_id: sessionId })
+    });
+    return response.json();
+  },
+  
+  generateShortStory: async (sessionId) => {
+    const response = await fetch(`${API_BASE_URL}/reading/short-story`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ session_id: sessionId })
+    });
+    return response.json();
+  },
+  
+  generateTopicalPassage: async (sessionId, topic) => {
+    const response = await fetch(`${API_BASE_URL}/reading/topical-passage`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ session_id: sessionId, topic })
+    });
+    return response.json();
   }
 };
 

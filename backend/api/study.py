@@ -124,6 +124,22 @@ def get_known_words():
     
     return jsonify({'words': known_words})
 
+@bp.route('/get-current-words', methods=['POST'])
+def get_current_words():
+    """
+    Get all words currently in the walking window (words being actively learned).
+    """
+    data = request.json
+    session_id = data.get('session_id')
+    
+    if session_id not in sessions:
+        return jsonify({'error': 'Session not found'}), 404
+    
+    walking_window = sessions[session_id]
+    current_words = [word_to_dict(w) for w in walking_window.current_words]
+    
+    return jsonify({'words': current_words})
+
 @bp.route('/check-review-answer', methods=['POST'])
 def check_review_answer():
     """

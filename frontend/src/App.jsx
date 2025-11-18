@@ -7,6 +7,9 @@ import ReviewPage from './pages/ReviewPage'
 import StatsPage from './pages/StatsPage'
 import SettingsPage from './pages/SettingsPage'
 import AboutPage from './pages/AboutPage'
+import GuidedReadingModePage from './pages/GuidedReadingModePage'
+import ShortStoryPage from './pages/ShortStoryPage'
+import TopicalPassagePage from './pages/TopicalPassagePage'
 
 function App() {
   return (
@@ -17,6 +20,9 @@ function App() {
       <Route path="/choice" element={<ChoicePage />} />
       <Route path="/text" element={<TextPage />} />
       <Route path="/review" element={<ReviewPage />} />
+      <Route path="/guided-reading" element={<GuidedReadingModePage />} />
+      <Route path="/guided-reading/short-story" element={<ShortStoryPage />} />
+      <Route path="/guided-reading/topical-passage" element={<TopicalPassagePage />} />
       <Route path="/stats" element={<StatsPage />} />
       <Route path="/settings" element={<SettingsPage />} />
       <Route path="/about" element={<AboutPage />} />

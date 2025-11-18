@@ -65,6 +65,13 @@ export default function MenuPage() {
           </button>
           
           <button
+            onClick={() => navigate('/guided-reading')}
+            className="w-full bg-[#9b59b6] text-white py-6 rounded-2xl text-4xl font-bold hover:bg-[#8e44ad] transition"
+          >
+            Guided Reading
+          </button>
+          
+          <button
             onClick={() => navigate('/stats')}
             className="w-full bg-[#ffc24a] text-white py-6 rounded-2xl text-4xl font-bold hover:bg-[#e6b042] transition"
           >

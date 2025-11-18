@@ -58,6 +58,7 @@ frontend/.vite/
 .env.development.local
 .env.test.local
 .env.production.local
+backend/.env
 
 # SMRT-PROJECT (if it's a submodule or shouldn't be committed)
 # Uncomment if needed:
