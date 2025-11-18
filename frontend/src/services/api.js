@@ -74,6 +74,15 @@ export const api = {
     });
     return response.json();
   },
+
+  checkReviewAnswer: async (sessionId, flashword, answer) => {
+    const response = await fetch(`${API_BASE_URL}/study/check-review-answer`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ session_id: sessionId, flashword, answer })
+    });
+    return response.json();
+  },
   
   // Stats
   getStats: async (sessionId) => {

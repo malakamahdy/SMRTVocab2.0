@@ -28,6 +28,18 @@ body {
   min-height: 100vh;
 }
 
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="number"],
+input[type="search"],
+input[type="tel"],
+input[type="url"] {
+  color: #000000;
+}
+
+
+
 
 
 

@@ -126,4 +126,5 @@ class Word:
                 #mark word as is_known
                 self.set_known_word()
                 return self.is_known
+        return False
 

@@ -116,7 +116,7 @@ export default function TextPage() {
             onChange={(e) => setAnswer(e.target.value)}
             placeholder="Type translation here..."
             disabled={disabled}
-            className="w-full px-6 py-4 bg-[#f1dfb6] border-2 border-[#bdb091] rounded-2xl text-4xl text-center disabled:opacity-50"
+            className="w-full px-6 py-4 bg-[#f1dfb6] border-2 border-[#bdb091] rounded-2xl text-4xl text-center text-black disabled:opacity-50"
             autoFocus
           />
           

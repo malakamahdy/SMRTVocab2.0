@@ -31,6 +31,7 @@ export default function ReviewPage() {
       loadRandomWord(result.words);
     } else {
       setFeedback({ text: 'No words to review!', color: '#f37d59' });
+      setFlashword(null);
     }
   };
 
@@ -64,12 +65,12 @@ export default function ReviewPage() {
     if (disabled) return;
     setDisabled(true);
     
-    const isCorrect = flashword.english.toLowerCase() === choice.english.toLowerCase();
+    const result = await api.checkReviewAnswer(sessionId, flashword, choice.english);
     
-    if (isCorrect) {
+    if (result.correct) {
       setFeedback({ text: 'Correct!', color: '#77721f' });
       setTimeout(() => {
-        loadRandomWord(knownWords);
+        loadKnownWords(sessionId);
       }, 1000);
     } else {
       setFeedback({ 
@@ -77,7 +78,7 @@ export default function ReviewPage() {
         color: '#f37d59' 
       });
       setTimeout(() => {
-        loadRandomWord(knownWords);
+        loadKnownWords(sessionId);
       }, 2000);
     }
   };
@@ -87,12 +88,12 @@ export default function ReviewPage() {
     if (disabled || !answer.trim()) return;
     setDisabled(true);
     
-    const isCorrect = flashword.english.toLowerCase() === answer.toLowerCase().trim();
+    const result = await api.checkReviewAnswer(sessionId, flashword, answer);
     
-    if (isCorrect) {
+    if (result.correct) {
       setFeedback({ text: 'Correct!', color: '#77721f' });
       setTimeout(() => {
-        loadRandomWord(knownWords);
+        loadKnownWords(sessionId);
       }, 1000);
     } else {
       setFeedback({ 
@@ -100,7 +101,7 @@ export default function ReviewPage() {
         color: '#f37d59' 
       });
       setTimeout(() => {
-        loadRandomWord(knownWords);
+        loadKnownWords(sessionId);
       }, 2000);
     }
   };
@@ -171,7 +172,7 @@ export default function ReviewPage() {
                   onChange={(e) => setAnswer(e.target.value)}
                   placeholder="Type translation here..."
                   disabled={disabled}
-                  className="w-full px-6 py-4 bg-[#f1dfb6] border-2 border-[#bdb091] rounded-2xl text-4xl text-center disabled:opacity-50"
+                  className="w-full px-6 py-4 bg-[#f1dfb6] border-2 border-[#bdb091] rounded-2xl text-4xl text-center text-black disabled:opacity-50"
                   autoFocus
                 />
                 

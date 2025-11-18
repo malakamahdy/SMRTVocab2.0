@@ -51,6 +51,8 @@ export default function ChoicePage() {
         text: `Not quite! ${flashword.foreign} means ${flashword.english.toLowerCase()}`, 
         color: '#f37d59' 
       });
+      // For incorrect answers, reload the same word so user can try again
+      // The word stays in current_words, so it may appear again
       setTimeout(() => {
         loadNewWord(sessionId);
       }, 2000);

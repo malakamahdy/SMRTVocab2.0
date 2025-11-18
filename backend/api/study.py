@@ -65,6 +65,11 @@ def check_answer():
     
     is_correct = walking_window.check_word_definition(flashword, answer)
     
+    # Auto-save after each answer to persist word statistics
+    username = session_id.split('_')[0] if '_' in session_id else settings.username
+    csv_name = f"{username}_{settings.LANGUAGE}.csv"
+    walking_window.word_dict_to_csv(csv_name)
+    
     return jsonify({
         'correct': is_correct,
         'word': word_to_dict(flashword)
@@ -84,6 +89,10 @@ def mark_known():
     
     if flashword:
         walking_window.mark_word_as_known(flashword)
+        # Auto-save after marking as known
+        username = session_id.split('_')[0] if '_' in session_id else settings.username
+        csv_name = f"{username}_{settings.LANGUAGE}.csv"
+        walking_window.word_dict_to_csv(csv_name)
     
     return jsonify({'success': True})
 
@@ -114,4 +123,37 @@ def get_known_words():
     known_words = [word_to_dict(w) for w in walking_window.words_dict.values() if w.is_known]
     
     return jsonify({'words': known_words})
+
+@bp.route('/check-review-answer', methods=['POST'])
+def check_review_answer():
+    """
+    Check answer for review mode (known words).
+    This updates word statistics but doesn't affect the walking window.
+    """
+    data = request.json
+    session_id = data.get('session_id')
+    flashword_data = data.get('flashword')
+    answer = data.get('answer')
+    
+    if session_id not in sessions:
+        return jsonify({'error': 'Session not found'}), 404
+    
+    walking_window = sessions[session_id]
+    flashword = walking_window.words_dict.get(flashword_data['foreign'])
+    
+    if not flashword:
+        return jsonify({'error': 'Word not found'}), 404
+    
+    # Check answer and update statistics (but don't move words in walking window)
+    is_correct = flashword.check_definition(answer)
+    
+    # Auto-save after each review answer to persist word statistics
+    username = session_id.split('_')[0] if '_' in session_id else settings.username
+    csv_name = f"{username}_{settings.LANGUAGE}.csv"
+    walking_window.word_dict_to_csv(csv_name)
+    
+    return jsonify({
+        'correct': is_correct,
+        'word': word_to_dict(flashword)
+    })
 
