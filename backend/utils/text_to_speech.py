@@ -16,7 +16,9 @@ from utils import settings
 import re
 
 #Base directory for audio files
-BASE_AUDIO_DIR = "audio_files"
+# Get the backend directory (one level up from utils)
+BACKEND_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+BASE_AUDIO_DIR = os.path.join(BACKEND_DIR, "audio_files")
 LANGUAGES = {"english": "en", "spanish": "es", "french": "fr", "arabic": "ar", "japanese": "ja", "mandarin": "zh"}
 
 # Initialize pygame mixer

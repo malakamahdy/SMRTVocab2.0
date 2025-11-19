@@ -58,7 +58,8 @@ def serve_audio(lang, filename):
     import logging
     
     # Get the base directory (backend directory)
-    base_dir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+    # From backend/api/words.py, go up 2 levels: api -> backend
+    base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     audio_dir = os.path.join(base_dir, 'audio_files', lang)
     
     # Decode the filename from URL encoding
