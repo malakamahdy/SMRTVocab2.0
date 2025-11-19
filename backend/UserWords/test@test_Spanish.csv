@@ -135,13 +135,13 @@ cosa,thing,0,0,0,1
 sea,be,1,0,1,0
 momento,moment,0,0,0,1
 menos,less,0,0,0,1
-cuenta,bill,0,0,0,0
+cuenta,bill,0,0,0,1
 da,gives,0,0,0,1
 ella,she,1,1,0,0
 claro,Sure,0,0,0,1
 mañana,morning,0,0,0,0
 días,days,0,0,0,0
-unos,some,1,1,0,0
+unos,some,1,1,0,1
 sabe,knows,0,0,0,1
 dije,I said,2,0,2,0
 dice,He says,0,0,0,0
