@@ -111,12 +111,118 @@ export const api = {
   
   // TTS
   getTTS: async (word, language) => {
-    const response = await fetch(`${API_BASE_URL}/words/tts`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ word, language })
-    });
-    return response.json();
+    try {
+      const response = await fetch(`${API_BASE_URL}/words/tts`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ word, language })
+      });
+      
+      if (!response.ok) {
+        console.error('TTS API error:', response.status, response.statusText);
+        return { error: `Failed to get TTS: ${response.statusText}` };
+      }
+      
+      const result = await response.json();
+      console.log('TTS result:', result);
+      
+      // If successful, play the audio
+      if (result.success && result.audio_url) {
+        const audioUrl = `http://localhost:5000${result.audio_url}`;
+        console.log('Playing audio from URL:', audioUrl);
+        
+        const audio = new Audio(audioUrl);
+        
+        // Set up event listeners for debugging
+        audio.addEventListener('loadstart', () => {
+          console.log('Audio loading started');
+        });
+        
+        audio.addEventListener('loadeddata', () => {
+          console.log('Audio data loaded');
+        });
+        
+        audio.addEventListener('canplay', () => {
+          console.log('Audio can play');
+        });
+        
+        audio.addEventListener('error', (e) => {
+          console.error('Audio error:', e);
+          console.error('Audio error details:', audio.error);
+          console.error('Audio error code:', audio.error?.code);
+          console.error('Audio error message:', audio.error?.message);
+          console.error('Audio src:', audio.src);
+          console.error('Audio networkState:', audio.networkState);
+          console.error('Audio readyState:', audio.readyState);
+          
+          // Try to fetch the URL directly to see if it's accessible
+          fetch(audioUrl)
+            .then(response => {
+              console.log('Direct fetch response status:', response.status);
+              console.log('Direct fetch response ok:', response.ok);
+              if (!response.ok) {
+                console.error('Direct fetch error:', response.statusText);
+                return response.text();
+              }
+            })
+            .then(text => {
+              if (text) {
+                console.error('Direct fetch error body:', text);
+              }
+            })
+            .catch(fetchError => {
+              console.error('Direct fetch exception:', fetchError);
+            });
+        });
+        
+        audio.addEventListener('play', () => {
+          console.log('Audio started playing');
+        });
+        
+        // Load the audio first, then play when ready
+        audio.load();
+        
+        // Wait for audio to be ready to play
+        const playAudio = () => {
+          const playPromise = audio.play();
+          
+          if (playPromise !== undefined) {
+            playPromise
+              .then(() => {
+                console.log('Audio playing successfully');
+              })
+              .catch(error => {
+                console.error('Error playing audio:', error);
+                // Some browsers require user interaction before playing audio
+                if (error.name === 'NotAllowedError') {
+                  console.error('Audio play was blocked. User interaction may be required.');
+                  alert('Please click the button again to play audio. Some browsers require user interaction.');
+                }
+              });
+          }
+        };
+        
+        // Try to play when audio can play
+        if (audio.readyState >= 2) { // HAVE_CURRENT_DATA or higher
+          playAudio();
+        } else {
+          audio.addEventListener('canplay', playAudio, { once: true });
+          // Fallback: try to play after a short delay
+          setTimeout(() => {
+            if (audio.readyState >= 2) {
+              playAudio();
+            }
+          }, 100);
+        }
+      } else {
+        console.error('TTS failed:', result.error);
+      }
+      
+      return result;
+    } catch (error) {
+      console.error('TTS fetch error:', error);
+      return { error: `Failed to fetch TTS: ${error.message}` };
+    }
   },
   
   // Reading/Guided Reading

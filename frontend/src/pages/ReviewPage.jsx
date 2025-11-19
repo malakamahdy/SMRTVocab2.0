@@ -113,7 +113,7 @@ export default function ReviewPage() {
 
   if (!flashword && !feedback) {
     return <div className="min-h-screen bg-[#fdf3dd] flex items-center justify-center">
-      <div className="text-4xl">Loading...</div>
+      <div className="text-4xl text-black">Loading...</div>
     </div>;
   }
 

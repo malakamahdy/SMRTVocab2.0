@@ -44,7 +44,7 @@ export default function StatsPage() {
 
   if (!stats) {
     return <div className="min-h-screen bg-[#fdf3dd] flex items-center justify-center">
-      <div className="text-4xl">Loading...</div>
+      <div className="text-4xl text-black">Loading...</div>
     </div>;
   }
 
@@ -76,7 +76,7 @@ export default function StatsPage() {
         </div>
         
         <div className="bg-white p-6 rounded-2xl">
-          <h3 className="text-2xl font-bold mb-4">Check your progress</h3>
+          <h3 className="text-2xl font-bold mb-4 text-black">Check your progress</h3>
           <LineChart width={800} height={400} data={chartData}>
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="words" label={{ value: 'Number of Known Words', position: 'insideBottom', offset: -5 }} />
@@ -93,7 +93,7 @@ export default function StatsPage() {
               data={[{ words: userX, you: userY }]}
             />
           </LineChart>
-          <div className="text-center mt-4 text-xl">
+          <div className="text-center mt-4 text-xl text-black">
             {userX} words ~ {userY.toFixed(0)} Percent
           </div>
         </div>

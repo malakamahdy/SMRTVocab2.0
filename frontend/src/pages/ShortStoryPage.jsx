@@ -56,7 +56,7 @@ export default function ShortStoryPage() {
   if (loading) {
     return (
       <div className="min-h-screen bg-[#fdf3dd] flex items-center justify-center">
-        <div className="text-4xl">Generating story...</div>
+        <div className="text-4xl text-black">Generating story...</div>
       </div>
     );
   }

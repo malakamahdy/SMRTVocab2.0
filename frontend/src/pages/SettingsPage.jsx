@@ -43,7 +43,7 @@ export default function SettingsPage() {
 
   if (!settings) {
     return <div className="min-h-screen bg-[#fdf3dd] flex items-center justify-center">
-      <div className="text-4xl">Loading...</div>
+      <div className="text-4xl text-black">Loading...</div>
     </div>;
   }
 
@@ -63,7 +63,7 @@ export default function SettingsPage() {
           {/* Sliders */}
           <div className="grid grid-cols-2 gap-8">
             <div>
-              <label className="block text-2xl font-bold mb-2">
+              <label className="block text-2xl font-bold mb-2 text-black">
                 Known Word Requirement: {settings.known_threshold}
               </label>
               <input
@@ -77,7 +77,7 @@ export default function SettingsPage() {
             </div>
             
             <div>
-              <label className="block text-2xl font-bold mb-2">
+              <label className="block text-2xl font-bold mb-2 text-black">
                 Correct-Incorrect Gap: {settings.known_delta}
               </label>
               <input
@@ -91,7 +91,7 @@ export default function SettingsPage() {
             </div>
             
             <div>
-              <label className="block text-2xl font-bold mb-2">
+              <label className="block text-2xl font-bold mb-2 text-black">
                 Spaced Repetition Amount: {settings.srs_queue_length}
               </label>
               <input
@@ -105,7 +105,7 @@ export default function SettingsPage() {
             </div>
             
             <div>
-              <label className="block text-2xl font-bold mb-2">
+              <label className="block text-2xl font-bold mb-2 text-black">
                 Study Batch Size: {settings.walking_window_size}
               </label>
               <input
@@ -121,7 +121,7 @@ export default function SettingsPage() {
           
           {/* Language Selection */}
           <div>
-            <label className="block text-2xl font-bold mb-2">Language Selection</label>
+            <label className="block text-2xl font-bold mb-2 text-black">Language Selection</label>
             <select
               value={settings.language}
               onChange={(e) => handleChange('language', e.target.value)}
@@ -136,7 +136,7 @@ export default function SettingsPage() {
           {/* Toggles */}
           <div className="space-y-4">
             <div className="flex items-center justify-between">
-              <label className="text-2xl font-bold">Flashcard Display Language</label>
+              <label className="text-2xl font-bold text-black">Flashcard Display Language</label>
               <label className="relative inline-flex items-center cursor-pointer">
                 <input
                   type="checkbox"
@@ -145,12 +145,12 @@ export default function SettingsPage() {
                   className="sr-only peer"
                 />
                 <div className="w-14 h-7 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[4px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-6 after:w-6 after:transition-all peer-checked:bg-[#77721f]"></div>
-                <span className="ml-3 text-xl">{settings.foreign_to_english ? settings.language : 'English'}</span>
+                <span className="ml-3 text-xl text-black">{settings.foreign_to_english ? settings.language : 'English'}</span>
               </label>
             </div>
             
             <div className="flex items-center justify-between">
-              <label className="text-2xl font-bold">Auto Pronunciation</label>
+              <label className="text-2xl font-bold text-black">Auto Pronunciation</label>
               <label className="relative inline-flex items-center cursor-pointer">
                 <input
                   type="checkbox"
@@ -159,12 +159,12 @@ export default function SettingsPage() {
                   className="sr-only peer"
                 />
                 <div className="w-14 h-7 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[4px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-6 after:w-6 after:transition-all peer-checked:bg-[#77721f]"></div>
-                <span className="ml-3 text-xl">{settings.auto_tts ? 'On' : 'Off'}</span>
+                <span className="ml-3 text-xl text-black">{settings.auto_tts ? 'On' : 'Off'}</span>
               </label>
             </div>
             
             <div>
-              <label className="block text-2xl font-bold mb-2">
+              <label className="block text-2xl font-bold mb-2 text-black">
                 Volume: {settings.volume}%
               </label>
               <input

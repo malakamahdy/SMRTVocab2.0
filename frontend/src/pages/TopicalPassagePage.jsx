@@ -107,7 +107,7 @@ export default function TopicalPassagePage() {
         )}
         
         {loading && (
-          <div className="text-center text-4xl py-12">
+          <div className="text-center text-4xl py-12 text-black">
             Generating passage...
           </div>
         )}

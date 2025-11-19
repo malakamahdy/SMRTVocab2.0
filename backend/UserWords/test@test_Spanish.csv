@@ -13,11 +13,11 @@ el,the,0,0,0,0
 en,in,0,0,0,0
 por,for,0,0,0,0
 sé,I know,0,0,0,0
-con,with,0,0,0,0
+con,with,1,1,0,0
 un,a,0,0,0,0
 ya,already,0,0,0,0
 para,for,0,0,0,0
-mí,me,0,0,0,0
+mí,my,0,0,0,0
 una,a,0,0,0,0
 está,is,0,0,0,0
 los,the,0,0,0,0
@@ -98,7 +98,6 @@ creo,I think,0,0,0,0
 tenemos,we have,0,0,0,0
 otro,other,0,0,0,0
 aquí,here,0,0,0,0
-mí,my,0,0,0,0
 ni,neither,0,0,0,0
 solo,only,0,0,0,0
 nunca,never,0,0,0,0
@@ -555,7 +554,7 @@ dejo,left,0,0,0,0
 entender,to understand,0,0,0,0
 e,and,0,0,0,0
 siete,seven,0,0,0,0
-adiós,bye,0,0,0,0
+adiós, goodbye,0,0,0,0
 foto,Photo,0,0,0,0
 dijeron,They said,0,0,0,0
 dan,give,0,0,0,0
@@ -4999,4 +4998,3 @@ tomate,take,0,0,0,0
 entiendan,understand,0,0,0,0
 cruel,cruel,0,0,0,0
 abandonada,abandoned,0,0,0,0
-adiós, goodbye,0,0,0,0

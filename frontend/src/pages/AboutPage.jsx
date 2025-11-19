@@ -36,7 +36,7 @@ export default function AboutPage() {
               href="https://sites.google.com/view/smrt-vocab/home"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-blue-300 text-2xl font-bold hover:underline"
+              className="text-black text-2xl font-bold hover:underline"
             >
               Visit us!
             </a>
