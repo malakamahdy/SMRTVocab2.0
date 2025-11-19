@@ -27,6 +27,16 @@ export default function AboutPage() {
               movies, books, and even conversations in your target language.
             </p>
             <p>
+              This web-based version brings language learning to your browser, accessible anywhere. Study with multiple-choice 
+              and text-input flashcards, review your known vocabulary, or explore our new <strong>Guided Reading</strong> mode—featuring 
+              AI-generated short stories and topical passages that incorporate your learning words. All content is tailored to help 
+              you see vocabulary in natural context while building real reading comprehension.
+            </p>
+            <p>
+              Track your progress with detailed statistics, customize your learning experience with adjustable settings, and practice 
+              pronunciation with text-to-speech. Currently supporting Spanish, with beta support for French, Arabic, and others.
+            </p>
+            <p>
               No distractions. No limits. Just smarter learning. With SMRT Vocab, the world of language is yours to explore!
             </p>
           </div>
