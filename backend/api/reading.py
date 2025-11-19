@@ -18,16 +18,18 @@ bp = Blueprint('reading', __name__, url_prefix='/api/reading')
 
 # Try to import Gemini API (will fail gracefully if not installed)
 try:
-    import google.generativeai as genai
+    from google import genai
     GENAI_AVAILABLE = True
 except ImportError:
     GENAI_AVAILABLE = False
     genai = None
 
-# Initialize Gemini API
+# Initialize Gemini API client
 GEMINI_API_KEY = os.getenv('GEMINI_API_KEY')
+client = None
 if GEMINI_API_KEY and GENAI_AVAILABLE:
-    genai.configure(api_key=GEMINI_API_KEY)
+    # Client automatically gets API key from GEMINI_API_KEY environment variable
+    client = genai.Client()
 
 def build_words_list(current_words):
     """Build a formatted string of words with their translations for the prompt."""
@@ -58,10 +60,10 @@ def generate_short_story():
     Generate a short story in the target language using words from the walking window.
     """
     if not GENAI_AVAILABLE:
-        return jsonify({'error': 'Google Generative AI package not installed. Please install: pip install google-generativeai'}), 500
+        return jsonify({'error': 'Google Generative AI package not installed. Please install: pip install google-genai'}), 500
     
-    if not GEMINI_API_KEY:
-        return jsonify({'error': 'Gemini API key not configured'}), 500
+    if not client:
+        return jsonify({'error': 'Gemini API key not configured or client not initialized'}), 500
     
     data = request.json
     session_id = data.get('session_id')
@@ -88,8 +90,25 @@ Requirements:
 - Let the story length be appropriate for reading practice"""
 
     try:
-        model = genai.GenerativeModel('gemini-pro')
-        response = model.generate_content(prompt)
+        # Try newer model names first, fall back to older ones
+        model_names = ['gemini-2.5-flash', 'gemini-1.5-flash', 'gemini-1.5-pro']
+        response = None
+        last_error = None
+        
+        for model_name in model_names:
+            try:
+                response = client.models.generate_content(
+                    model=model_name,
+                    contents=prompt
+                )
+                break
+            except Exception as e:
+                last_error = e
+                continue
+        
+        if response is None:
+            raise Exception(f"Could not find a working model. Last error: {str(last_error)}")
+        
         story_text = response.text.strip()
         
         return jsonify({
@@ -106,10 +125,10 @@ def generate_topical_passage():
     Generate a topical passage in the target language using words from the walking window.
     """
     if not GENAI_AVAILABLE:
-        return jsonify({'error': 'Google Generative AI package not installed. Please install: pip install google-generativeai'}), 500
+        return jsonify({'error': 'Google Generative AI package not installed. Please install: pip install google-genai'}), 500
     
-    if not GEMINI_API_KEY:
-        return jsonify({'error': 'Gemini API key not configured'}), 500
+    if not client:
+        return jsonify({'error': 'Gemini API key not configured or client not initialized'}), 500
     
     data = request.json
     session_id = data.get('session_id')
@@ -141,8 +160,25 @@ Requirements:
 - Let the passage length be appropriate for reading practice"""
 
     try:
-        model = genai.GenerativeModel('gemini-pro')
-        response = model.generate_content(prompt)
+        # Try newer model names first, fall back to older ones
+        model_names = ['gemini-2.5-flash', 'gemini-1.5-flash', 'gemini-1.5-pro']
+        response = None
+        last_error = None
+        
+        for model_name in model_names:
+            try:
+                response = client.models.generate_content(
+                    model=model_name,
+                    contents=prompt
+                )
+                break
+            except Exception as e:
+                last_error = e
+                continue
+        
+        if response is None:
+            raise Exception(f"Could not find a working model. Last error: {str(last_error)}")
+        
         passage_text = response.text.strip()
         
         return jsonify({
