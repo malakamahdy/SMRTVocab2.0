@@ -7,17 +7,20 @@ A fully functional React web application with Python Flask backend, adapted from
 ```
 SMRTVocab2.0/
 ├── backend/              # Python Flask API server
-│   ├── api/             # API endpoints
+│   ├── api/             # API endpoints (auth, classrooms, stats, study, etc.)
 │   ├── models/          # Data models (Word, WalkingWindow)
 │   ├── utils/           # Utilities (Settings, TextToSpeech)
-│   ├── UserWords/       # User word CSV files
+│   ├── UserWords/       # User word CSV files (excluded from git)
+│   ├── AccountInformation.csv  # User accounts with roles (excluded from git)
+│   ├── Classrooms.csv   # Classroom data (excluded from git)
+│   ├── ClassroomMembers.csv  # Student-classroom memberships (excluded from git)
 │   ├── app.py           # Flask application entry point
 │   └── requirements.txt # Python dependencies
 ├── frontend/            # React web application
 │   ├── src/
-│   │   ├── pages/       # React page components
+│   │   ├── pages/       # React page components (including classroom pages)
 │   │   ├── services/    # API service layer
-│   │   └── App.jsx      # Main app component
+│   │   └── App.jsx      # Main app component with routing
 │   └── package.json     # Node.js dependencies
 └── SMRT-PROJECT/        # Original Python desktop application
 ```
@@ -64,13 +67,50 @@ npm run dev
 
 The frontend will be available at `http://localhost:5173` (or the port Vite assigns)
 
+## Usage
+
+1. Open your browser and navigate to the frontend URL (e.g., `http://localhost:5173`)
+2. Register a new account:
+   - Choose **"Student"** to join classrooms and track your learning progress
+   - Choose **"Instructor"** to create and manage classrooms for your students
+3. Start learning!
+
+### For Instructors:
+- Click **"Manage Classrooms"** from the menu to create new classrooms
+- Share the generated classroom code with your students
+- View classroom details including:
+  - Dashboard statistics (total students, average progress, accuracy)
+  - Real-time leaderboard with student rankings
+  - Individual student progress by clicking **"View student progress"**
+  - Detailed word learning status for each student:
+    - Words currently being learned
+    - Words students are struggling with
+    - Words students have mastered
+
+### For Students:
+- Click **"My Classroom"** from the menu to:
+  - Join classrooms using codes provided by your instructor
+  - View your position on the leaderboard
+  - See your progress compared to other students in the classroom
+  - Access all classrooms you've joined (memberships persist across sessions)
+
 ## Features
 
-- **User Authentication**: Login and registration system
+- **User Authentication**: Login and registration system with role-based access (Student/Instructor)
+- **Classroom Management** (Kahoot-style):
+  - Instructors can create classrooms and generate join codes
+  - Students can join classrooms using codes
+  - Real-time leaderboards showing student rankings
+  - Classroom memberships persist across sessions
+  - Instructors can view detailed student progress:
+    - Words students are currently learning
+    - Words students are struggling with
+    - Words students have mastered
 - **Multiple Study Modes**:
   - Multiple Choice Flashcards
   - Text-Input Flashcards
   - Review Mode (for known words)
+  - Guided Reading Mode
 - **Statistics**: Track your learning progress with visual charts
 - **Settings**: Customize your learning experience
 - **Text-to-Speech**: Pronunciation support for multiple languages
@@ -80,8 +120,8 @@ The frontend will be available at `http://localhost:5173` (or the port Vite assi
 ## API Endpoints
 
 ### Authentication
-- `POST /api/auth/login` - User login
-- `POST /api/auth/register` - User registration
+- `POST /api/auth/login` - User login (returns user role)
+- `POST /api/auth/register` - User registration (requires role: Student or Instructor)
 
 ### Study
 - `POST /api/study/init` - Initialize study session
@@ -100,6 +140,21 @@ The frontend will be available at `http://localhost:5173` (or the port Vite assi
 
 ### Words
 - `POST /api/words/tts` - Generate text-to-speech audio
+
+### Classrooms
+- `POST /api/classrooms/create` - Create a new classroom (instructor only)
+- `GET /api/classrooms/instructor/<email>` - Get all classrooms for an instructor
+- `POST /api/classrooms/join` - Join a classroom using a code (student only)
+- `GET /api/classrooms/<code>` - Get classroom details
+- `GET /api/classrooms/<code>/members` - Get all members of a classroom
+- `GET /api/classrooms/student/<email>` - Get all classrooms a student has joined
+
+### Classroom Statistics
+- `GET /api/classroom-stats/leaderboard/<code>` - Get classroom leaderboard
+- `GET /api/classroom-stats/student/<code>/<email>` - Get student progress in classroom
+- `GET /api/classroom-stats/dashboard/<code>` - Get instructor dashboard with aggregated stats
+- `GET /api/classroom-stats/student/<code>/<email>/walking-window` - Get student's current words being learned
+- `GET /api/classroom-stats/student/<code>/<email>/all-words/<language>` - Get all student words categorized by status
 
 ## Technologies Used
 
@@ -122,7 +177,10 @@ The frontend will be available at `http://localhost:5173` (or the port Vite assi
 - All backend logic from the original Python application is preserved
 - The Walking Window algorithm and spaced repetition system are fully functional
 - User data is stored in CSV files (same format as original application)
+- Classroom data is stored in CSV files: `Classrooms.csv` and `ClassroomMembers.csv`
 - Audio files for TTS are cached in the `audio_files` directory
+- User roles (Student/Instructor) are stored in `AccountInformation.csv` and persist across sessions
+- Classroom memberships persist across login sessions - students remain in classrooms after logging out
 
 ## Development
 
