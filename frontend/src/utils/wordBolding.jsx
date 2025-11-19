@@ -73,7 +73,12 @@ export function boldCurrentWords(text, currentWords) {
     return text;
   }
   
-  // First, convert any markdown bold to HTML bold
+  // First, remove any existing <strong> tags from the text (Gemini may output them)
+  // This prevents double-bolding and ensures clean text for processing
+  text = text.replace(/<strong>/gi, '');
+  text = text.replace(/<\/strong>/gi, '');
+  
+  // Then, convert any markdown bold to HTML bold
   text = convertMarkdownBold(text);
   
   if (!currentWords || currentWords.length === 0) {

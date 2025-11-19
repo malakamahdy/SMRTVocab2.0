@@ -87,7 +87,8 @@ Requirements:
 - Write the entire story in {language_name} only
 - Use the words naturally in context (do not list them separately)
 - Make the story engaging and interesting
-- Let the story length be appropriate for reading practice"""
+- Keep the story short: exactly 2-3 paragraphs
+- Each paragraph should be concise but complete"""
 
     try:
         # Try newer model names first, fall back to older ones
@@ -152,12 +153,20 @@ def generate_topical_passage():
     
     prompt = f"""Write a passage in {language_name} about {topic}. 
 
+IMPORTANT: Research and web scrape articles about this topic to ensure accuracy and authenticity.
+
 Requirements:
+- First, search the web and find relevant articles about {topic} in {language_name}
+- Read and analyze multiple articles from reputable sources
 - Write the entire passage in {language_name} only
+- The passage must closely follow the information found in the original articles you researched
+- Stay faithful to the facts, data, and details from the source articles
 - Naturally incorporate these words that the reader is learning: {words_list}
-- The passage should be informative about the topic
+- The passage should be informative about the topic based on real articles
 - Use the words in context (do not list them separately)
-- Let the passage length be appropriate for reading practice"""
+- Keep the passage short: exactly 2-3 paragraphs
+- Each paragraph should be concise but complete
+- Do not make up or invent information - base everything on the articles you find"""
 
     try:
         # Try newer model names first, fall back to older ones
