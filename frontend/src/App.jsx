@@ -10,6 +10,11 @@ import AboutPage from './pages/AboutPage'
 import GuidedReadingModePage from './pages/GuidedReadingModePage'
 import ShortStoryPage from './pages/ShortStoryPage'
 import TopicalPassagePage from './pages/TopicalPassagePage'
+import ManageClassroomsPage from './pages/ManageClassroomsPage'
+import ClassroomDetailsPage from './pages/ClassroomDetailsPage'
+import JoinClassroomPage from './pages/JoinClassroomPage'
+import MyClassroomPage from './pages/MyClassroomPage'
+import StudentProgressPage from './pages/StudentProgressPage'
 
 function App() {
   return (
@@ -26,6 +31,11 @@ function App() {
       <Route path="/stats" element={<StatsPage />} />
       <Route path="/settings" element={<SettingsPage />} />
       <Route path="/about" element={<AboutPage />} />
+      <Route path="/manage-classrooms" element={<ManageClassroomsPage />} />
+      <Route path="/classroom/:code" element={<ClassroomDetailsPage />} />
+      <Route path="/student-progress/:code/:studentEmail" element={<StudentProgressPage />} />
+      <Route path="/join-classroom" element={<JoinClassroomPage />} />
+      <Route path="/my-classroom" element={<MyClassroomPage />} />
     </Routes>
   )
 }

@@ -5,6 +5,7 @@ import { api } from '../services/api';
 export default function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [role, setRole] = useState('Student');
   const [error, setError] = useState('');
   const [isRegistering, setIsRegistering] = useState(false);
   const navigate = useNavigate();
@@ -15,13 +16,14 @@ export default function LoginPage() {
     
     try {
       const result = isRegistering 
-        ? await api.register(email, password)
+        ? await api.register(email, password, role)
         : await api.login(email, password);
       
       if (result.error) {
         setError(result.error);
       } else {
         localStorage.setItem('username', result.username);
+        localStorage.setItem('role', result.role || role);
         navigate('/menu');
       }
     } catch (err) {
@@ -54,6 +56,36 @@ export default function LoginPage() {
             className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg text-xl text-black"
             required
           />
+          
+          {isRegistering && (
+            <div className="space-y-2">
+              <label className="block text-lg font-semibold text-black">I am a:</label>
+              <div className="flex gap-4">
+                <label className="flex items-center space-x-2 cursor-pointer">
+                  <input
+                    type="radio"
+                    name="role"
+                    value="Student"
+                    checked={role === 'Student'}
+                    onChange={(e) => setRole(e.target.value)}
+                    className="w-5 h-5"
+                  />
+                  <span className="text-lg text-black">Student</span>
+                </label>
+                <label className="flex items-center space-x-2 cursor-pointer">
+                  <input
+                    type="radio"
+                    name="role"
+                    value="Instructor"
+                    checked={role === 'Instructor'}
+                    onChange={(e) => setRole(e.target.value)}
+                    className="w-5 h-5"
+                  />
+                  <span className="text-lg text-black">Instructor</span>
+                </label>
+              </div>
+            </div>
+          )}
           
           {error && (
             <div className="bg-red-500 text-white p-3 rounded-lg text-center">

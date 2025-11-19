@@ -27,6 +27,8 @@ wheels/
 backend/AccountInformation.csv
 backend/UserWords/*_*.csv
 !backend/UserWords/Template_*.csv
+backend/Classrooms.csv
+backend/ClassroomMembers.csv
 
 # Generated audio files
 backend/audio_files/**/*.mp3

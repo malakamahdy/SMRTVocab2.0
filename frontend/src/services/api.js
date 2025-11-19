@@ -11,11 +11,11 @@ export const api = {
     return response.json();
   },
   
-  register: async (email, password) => {
+  register: async (email, password, role) => {
     const response = await fetch(`${API_BASE_URL}/auth/register`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email, password })
+      body: JSON.stringify({ email, password, role })
     });
     return response.json();
   },
@@ -250,6 +250,72 @@ export const api = {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ session_id: sessionId, topic })
     });
+    return response.json();
+  },
+
+  // Classrooms
+  createClassroom: async (name, instructorEmail) => {
+    const response = await fetch(`${API_BASE_URL}/classrooms/create`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name, instructor_email: instructorEmail })
+    });
+    return response.json();
+  },
+
+  getInstructorClassrooms: async (email) => {
+    const response = await fetch(`${API_BASE_URL}/classrooms/instructor/${encodeURIComponent(email)}`);
+    return response.json();
+  },
+
+  joinClassroom: async (code, studentEmail) => {
+    const response = await fetch(`${API_BASE_URL}/classrooms/join`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ code, student_email: studentEmail })
+    });
+    return response.json();
+  },
+
+  getClassroomDetails: async (code) => {
+    const response = await fetch(`${API_BASE_URL}/classrooms/${encodeURIComponent(code)}`);
+    return response.json();
+  },
+
+  getClassroomMembers: async (code) => {
+    const response = await fetch(`${API_BASE_URL}/classrooms/${encodeURIComponent(code)}/members`);
+    return response.json();
+  },
+
+  getStudentClassrooms: async (email) => {
+    const response = await fetch(`${API_BASE_URL}/classrooms/student/${encodeURIComponent(email)}`);
+    return response.json();
+  },
+
+  // Classroom Stats
+  getClassroomLeaderboard: async (code) => {
+    const response = await fetch(`${API_BASE_URL}/classroom-stats/leaderboard/${encodeURIComponent(code)}`);
+    return response.json();
+  },
+
+  getStudentProgressInClassroom: async (code, email) => {
+    const response = await fetch(`${API_BASE_URL}/classroom-stats/student/${encodeURIComponent(code)}/${encodeURIComponent(email)}`);
+    return response.json();
+  },
+
+  getInstructorDashboard: async (code) => {
+    const response = await fetch(`${API_BASE_URL}/classroom-stats/dashboard/${encodeURIComponent(code)}`);
+    return response.json();
+  },
+
+  getStudentWalkingWindow: async (code, email, language) => {
+    const url = `${API_BASE_URL}/classroom-stats/student/${encodeURIComponent(code)}/${encodeURIComponent(email)}/walking-window${language ? `?language=${encodeURIComponent(language)}` : ''}`;
+    const response = await fetch(url);
+    return response.json();
+  },
+
+  getStudentAllWords: async (code, email, language) => {
+    const response = await fetch(`${API_BASE_URL}/classroom-stats/student/${encodeURIComponent(code)}/${encodeURIComponent(email)}/all-words/${encodeURIComponent(language)}`);
     return response.json();
   }
 };

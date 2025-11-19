@@ -5,16 +5,19 @@ import { api } from '../services/api';
 export default function MenuPage() {
   const navigate = useNavigate();
   const [username, setUsername] = useState('');
+  const [role, setRole] = useState('');
   const [sessionId, setSessionId] = useState(null);
 
   useEffect(() => {
     const storedUsername = localStorage.getItem('username');
+    const storedRole = localStorage.getItem('role') || 'Student';
     if (!storedUsername) {
       navigate('/login');
       return;
     }
     
     setUsername(storedUsername);
+    setRole(storedRole);
     // Initialize study session
     api.getSettings().then(settings => {
       api.initStudy(storedUsername, settings.language).then(result => {
@@ -31,6 +34,7 @@ export default function MenuPage() {
       await api.saveSession(sessionId, username);
     }
     localStorage.removeItem('username');
+    localStorage.removeItem('role');
     localStorage.removeItem('sessionId');
     navigate('/login');
   };
@@ -84,6 +88,24 @@ export default function MenuPage() {
           >
             Settings
           </button>
+
+          {role === 'Instructor' && (
+            <button
+              onClick={() => navigate('/manage-classrooms')}
+              className="w-full bg-[#3498db] text-white py-6 rounded-2xl text-4xl font-bold hover:bg-[#2980b9] transition"
+            >
+              Manage Classrooms
+            </button>
+          )}
+
+          {role === 'Student' && (
+            <button
+              onClick={() => navigate('/my-classroom')}
+              className="w-full bg-[#3498db] text-white py-6 rounded-2xl text-4xl font-bold hover:bg-[#2980b9] transition"
+            >
+              My Classroom
+            </button>
+          )}
         </div>
         
         <div className="flex justify-between mt-8">
