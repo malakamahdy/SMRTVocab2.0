@@ -81,18 +81,12 @@ def generate_short_story():
     language_name = get_language_name_for_prompt(language)
     words_list = build_words_list(current_words)
     
-    prompt = f"""Generate a short story in {language_name} that naturally incorporates these words: {words_list}.
-
-Requirements:
-- Write the entire story in {language_name} only
-- Use the words naturally in context (do not list them separately)
-- Make the story engaging and interesting
-- Keep the story short: exactly 2-3 paragraphs
-- Each paragraph should be concise but complete"""
+    # Simplified, concise prompt for faster generation
+    prompt = f"""Write a 2-3 paragraph story in {language_name} using these words: {words_list}. Keep it short and engaging."""
 
     try:
-        # Try newer model names first, fall back to older ones
-        model_names = ['gemini-2.5-flash', 'gemini-1.5-flash', 'gemini-1.5-pro']
+        # Prioritize fastest flash models first
+        model_names = ['gemini-1.5-flash', 'gemini-2.5-flash']
         response = None
         last_error = None
         
@@ -151,26 +145,12 @@ def generate_topical_passage():
     language_name = get_language_name_for_prompt(language)
     words_list = build_words_list(current_words)
     
-    prompt = f"""Write a passage in {language_name} about {topic}. 
-
-IMPORTANT: Research and web scrape articles about this topic to ensure accuracy and authenticity.
-
-Requirements:
-- First, search the web and find relevant articles about {topic} in {language_name}
-- Read and analyze multiple articles from reputable sources
-- Write the entire passage in {language_name} only
-- The passage must closely follow the information found in the original articles you researched
-- Stay faithful to the facts, data, and details from the source articles
-- Naturally incorporate these words that the reader is learning: {words_list}
-- The passage should be informative about the topic based on real articles
-- Use the words in context (do not list them separately)
-- Keep the passage short: exactly 2-3 paragraphs
-- Each paragraph should be concise but complete
-- Do not make up or invent information - base everything on the articles you find"""
+    # Simplified prompt - web search will happen automatically if available, but don't wait for extensive research
+    prompt = f"""Write a 2-3 paragraph passage in {language_name} about {topic}. Use accurate information and include these words: {words_list}. Keep it concise."""
 
     try:
-        # Try newer model names first, fall back to older ones
-        model_names = ['gemini-2.5-flash', 'gemini-1.5-flash', 'gemini-1.5-pro']
+        # Prioritize fastest flash models first
+        model_names = ['gemini-1.5-flash', 'gemini-2.5-flash']
         response = None
         last_error = None
         

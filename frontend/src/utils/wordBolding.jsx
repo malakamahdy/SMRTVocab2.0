@@ -31,28 +31,10 @@ function convertMarkdownBold(text) {
   text = text.replace(/(?<!\*)\*([^*\n]+?)\*(?!\*)/g, '$1');
   text = text.replace(/_([^_\n]+?)_/g, '$1');
   
-  // Decode HTML entities first (needed before parsing tags)
-  // Decode numeric entities
-  text = text.replace(/&#(\d+);/g, (match, dec) => String.fromCharCode(dec));
-  text = text.replace(/&#x([a-f\d]+);/gi, (match, hex) => String.fromCharCode(parseInt(hex, 16)));
-  
-  // Decode named entities
-  const entities = {
-    '&lt;': '<',
-    '&gt;': '>',
-    '&amp;': '&',
-    '&quot;': '"',
-    '&#39;': "'",
-    '&apos;': "'",
-    '&nbsp;': ' '
-  };
-  Object.entries(entities).forEach(([entity, char]) => {
-    text = text.replace(new RegExp(entity, 'g'), char);
-  });
-  
-  // Remove any literal HTML tags that might have been output as text (but preserve <strong>)
-  // This handles cases where Gemini outputs literal HTML tag text that isn't <strong>
-  text = text.replace(/<(?!(?:\/strong|strong\b))[^>]+>/gi, '');
+  // Remove any literal HTML tags that might have been output as text (including <strong>)
+  // This handles cases where Gemini outputs literal HTML tag text
+  // Note: HTML entities should already be decoded by the caller, and <strong> tags removed
+  text = text.replace(/<[^>]+>/gi, '');
   
   // Clean up any extra whitespace from removed markdown
   text = text.replace(/\n{3,}/g, '\n\n');
@@ -73,8 +55,28 @@ export function boldCurrentWords(text, currentWords) {
     return text;
   }
   
-  // First, remove any existing <strong> tags from the text (Gemini may output them)
+  // First decode HTML entities to handle encoded tags like &lt;strong&gt;
+  // Decode numeric entities
+  text = text.replace(/&#(\d+);/g, (match, dec) => String.fromCharCode(dec));
+  text = text.replace(/&#x([a-f\d]+);/gi, (match, hex) => String.fromCharCode(parseInt(hex, 16)));
+  
+  // Decode named entities
+  const entities = {
+    '&lt;': '<',
+    '&gt;': '>',
+    '&amp;': '&',
+    '&quot;': '"',
+    '&#39;': "'",
+    '&apos;': "'",
+    '&nbsp;': ' '
+  };
+  Object.entries(entities).forEach(([entity, char]) => {
+    text = text.replace(new RegExp(entity, 'g'), char);
+  });
+  
+  // Then, remove any existing <strong> tags from the text (Gemini may output them as plain text or decoded)
   // This prevents double-bolding and ensures clean text for processing
+  // Remove both opening and closing tags, and their content should be preserved as plain text
   text = text.replace(/<strong>/gi, '');
   text = text.replace(/<\/strong>/gi, '');
   
