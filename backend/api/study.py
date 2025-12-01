@@ -26,12 +26,23 @@ def init_study():
     data = request.json
     username = data.get('username')
     language = data.get('language', settings.LANGUAGE)
+    assignment_id = data.get('assignment_id')  # Optional: for assignment mode
     
     settings.username = username
     settings.LANGUAGE = language
     
-    session_id = f"{username}_{language}"
-    sessions[session_id] = WalkingWindow(size=settings.WALKING_WINDOW_SIZE)
+    if assignment_id:
+        # Assignment mode
+        session_id = f"{username}_{language}_assignment_{assignment_id}"
+        sessions[session_id] = WalkingWindow(
+            size=settings.WALKING_WINDOW_SIZE,
+            assignment_id=assignment_id,
+            student_email=username
+        )
+    else:
+        # Normal mode
+        session_id = f"{username}_{language}"
+        sessions[session_id] = WalkingWindow(size=settings.WALKING_WINDOW_SIZE)
     
     return jsonify({'success': True, 'session_id': session_id})
 
@@ -54,26 +65,60 @@ def check_answer():
     flashword_data = data.get('flashword')
     answer = data.get('answer')
     
+    if not session_id:
+        return jsonify({'error': 'Session ID is required'}), 400
+    
     if session_id not in sessions:
         return jsonify({'error': 'Session not found'}), 404
     
-    walking_window = sessions[session_id]
-    flashword = walking_window.words_dict.get(flashword_data['foreign'])
+    if not flashword_data:
+        return jsonify({'error': 'Flashword is required'}), 400
     
-    if not flashword:
-        return jsonify({'error': 'Word not found'}), 404
+    if not answer:
+        return jsonify({'error': 'Answer is required'}), 400
     
-    is_correct = walking_window.check_word_definition(flashword, answer)
-    
-    # Auto-save after each answer to persist word statistics
-    username = session_id.split('_')[0] if '_' in session_id else settings.username
-    csv_name = f"{username}_{settings.LANGUAGE}.csv"
-    walking_window.word_dict_to_csv(csv_name)
-    
-    return jsonify({
-        'correct': is_correct,
-        'word': word_to_dict(flashword)
-    })
+    try:
+        walking_window = sessions[session_id]
+        
+        # Get the foreign word from flashword_data
+        # flashword_data should be a dict with 'foreign' and 'english' keys
+        if not isinstance(flashword_data, dict):
+            return jsonify({'error': 'Flashword must be an object with foreign and english properties'}), 400
+        
+        foreign_word = flashword_data.get('foreign')
+        
+        if not foreign_word:
+            return jsonify({'error': 'Flashword foreign text is required'}), 400
+        
+        flashword = walking_window.words_dict.get(foreign_word)
+        
+        if not flashword:
+            # Log available words for debugging
+            available_words = list(walking_window.words_dict.keys())[:10]  # First 10 for debugging
+            import logging
+            logging.warning(f"Word '{foreign_word}' not found. Available words (sample): {available_words}")
+            return jsonify({'error': f'Word "{foreign_word}" not found in word list'}), 404
+        
+        # Check the answer - answer should be a string (the English translation)
+        if not isinstance(answer, str):
+            answer = str(answer)
+        
+        is_correct = walking_window.check_word_definition(flashword, answer)
+        
+        # Auto-save after each answer to persist word statistics
+        # Extract username from session_id (format: username_language or username_language_assignment_id)
+        username = session_id.split('_')[0] if '_' in session_id else settings.username
+        csv_name = f"{username}_{settings.LANGUAGE}.csv"
+        walking_window.word_dict_to_csv(csv_name)
+        
+        return jsonify({
+            'correct': is_correct,
+            'word': word_to_dict(flashword)
+        })
+    except Exception as e:
+        import logging
+        logging.error(f"Error in check_answer: {str(e)}", exc_info=True)
+        return jsonify({'error': f'Error processing answer: {str(e)}'}), 500
 
 @bp.route('/mark-known', methods=['POST'])
 def mark_known():
@@ -89,7 +134,7 @@ def mark_known():
     
     if flashword:
         walking_window.mark_word_as_known(flashword)
-        # Auto-save after marking as known
+        # Auto-save after marking as known (handles both assignment and personal modes)
         username = session_id.split('_')[0] if '_' in session_id else settings.username
         csv_name = f"{username}_{settings.LANGUAGE}.csv"
         walking_window.word_dict_to_csv(csv_name)

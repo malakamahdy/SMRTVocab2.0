@@ -9,10 +9,6 @@ export default function ClassroomDetailsPage() {
   const [dashboard, setDashboard] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
-  const [selectedStudent, setSelectedStudent] = useState(null);
-  const [walkingWindow, setWalkingWindow] = useState(null);
-  const [loadingWalkingWindow, setLoadingWalkingWindow] = useState(false);
-  const [selectedLanguage, setSelectedLanguage] = useState('Spanish');
 
   useEffect(() => {
     const storedRole = localStorage.getItem('role');
@@ -61,34 +57,6 @@ export default function ClassroomDetailsPage() {
     }
   };
 
-  const loadStudentWalkingWindow = async (studentEmail, language) => {
-    if (!code || !studentEmail) return;
-    
-    setLoadingWalkingWindow(true);
-    setError('');
-    
-    try {
-      const result = await api.getStudentWalkingWindow(code, studentEmail, language);
-      if (result.success) {
-        setWalkingWindow(result);
-        setSelectedStudent(studentEmail);
-        setSelectedLanguage(language);
-      } else {
-        setError(result.error || 'Failed to load walking window');
-      }
-    } catch (err) {
-      setError('Failed to load walking window');
-      console.error('Error loading walking window:', err);
-    } finally {
-      setLoadingWalkingWindow(false);
-    }
-  };
-
-  const closeWalkingWindow = () => {
-    setSelectedStudent(null);
-    setWalkingWindow(null);
-  };
-
   if (loading) {
     return (
       <div className="min-h-screen bg-[#fdf3dd] flex items-center justify-center">
@@ -129,12 +97,20 @@ export default function ClassroomDetailsPage() {
               </button>
             </p>
           </div>
-          <button
-            onClick={() => navigate('/manage-classrooms')}
-            className="bg-[#0f606b] text-white px-6 py-3 rounded-xl text-xl font-bold hover:bg-[#0a4a52] transition"
-          >
-            Back to Classrooms
-          </button>
+          <div className="flex gap-4">
+            <button
+              onClick={() => navigate(`/classroom/${code}/assignments`)}
+              className="bg-[#2ecc71] text-white px-6 py-3 rounded-xl text-xl font-bold hover:bg-[#27ae60] transition"
+            >
+              Assignments
+            </button>
+            <button
+              onClick={() => navigate('/manage-classrooms')}
+              className="bg-[#0f606b] text-white px-6 py-3 rounded-xl text-xl font-bold hover:bg-[#0a4a52] transition"
+            >
+              Back to Classrooms
+            </button>
+          </div>
         </div>
 
         {error && (
@@ -143,6 +119,8 @@ export default function ClassroomDetailsPage() {
           </div>
         )}
 
+        {/* Dashboard Content */}
+        <>
         {/* Dashboard Stats */}
         {dashboard && (
           <div className="bg-white rounded-2xl p-8 mb-8 shadow-lg">
@@ -205,112 +183,13 @@ export default function ClassroomDetailsPage() {
                         </div>
                       </div>
                       <button
-                        onClick={() => loadStudentWalkingWindow(student.student_email, selectedLanguage)}
-                        className="bg-[#9b59b6] text-white px-6 py-3 rounded-lg text-lg font-bold hover:bg-[#8e44ad] transition shadow-lg"
+                        onClick={() => navigate(`/student-progress/${code}/${student.student_email}`)}
+                        className="bg-[#9b59b6] text-white px-8 py-4 rounded-lg text-xl font-bold hover:bg-[#8e44ad] transition shadow-lg whitespace-nowrap"
                       >
-                        View current words
+                        View student progress
                       </button>
                     </div>
                   </div>
-                  
-                  {/* Walking Window Display */}
-                  {selectedStudent === student.student_email && walkingWindow && (
-                    <div className="mt-6 pt-6 border-t-2 border-gray-300">
-                      <div className="flex justify-between items-center mb-4">
-                        <h4 className="text-2xl font-bold text-black">Walking Window - {selectedLanguage}</h4>
-                        <button
-                          onClick={closeWalkingWindow}
-                          className="bg-gray-500 text-white px-4 py-2 rounded-lg text-sm font-bold hover:bg-gray-600 transition"
-                        >
-                          Close
-                        </button>
-                      </div>
-                      
-                      {/* Language Selector */}
-                      <div className="mb-4">
-                        <label className="text-lg font-semibold text-black mr-2">Language:</label>
-                        <select
-                          value={selectedLanguage}
-                          onChange={(e) => {
-                            setSelectedLanguage(e.target.value);
-                            loadStudentWalkingWindow(student.student_email, e.target.value);
-                          }}
-                          className="px-4 py-2 border-2 border-gray-300 rounded-lg text-lg"
-                        >
-                          <option value="Spanish">Spanish</option>
-                          <option value="French">French</option>
-                          <option value="Arabic">Arabic</option>
-                          <option value="Japanese">Japanese</option>
-                          <option value="Mandarin">Mandarin</option>
-                          <option value="Hieroglyphic">Hieroglyphic</option>
-                        </select>
-                      </div>
-
-                      {loadingWalkingWindow ? (
-                        <div className="text-center py-8 text-gray-600">Loading walking window...</div>
-                      ) : (
-                        <>
-                          {/* Current Words */}
-                          <div className="mb-6">
-                            <h5 className="text-xl font-bold text-black mb-3">
-                              Current Words ({walkingWindow.current_words?.length || 0})
-                            </h5>
-                            {walkingWindow.current_words && walkingWindow.current_words.length > 0 ? (
-                              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-                                {walkingWindow.current_words.map((word, idx) => (
-                                  <div
-                                    key={idx}
-                                    className="bg-blue-50 border-2 border-blue-200 rounded-lg p-4"
-                                  >
-                                    <div className="font-bold text-lg text-black mb-1">
-                                      {word.foreign}
-                                    </div>
-                                    <div className="text-gray-700 mb-2">{word.english}</div>
-                                    <div className="text-sm text-gray-600">
-                                      Seen: {word.count_seen} | 
-                                      Correct: {word.count_correct} | 
-                                      Wrong: {word.count_incorrect}
-                                    </div>
-                                  </div>
-                                ))}
-                              </div>
-                            ) : (
-                              <p className="text-gray-600">No words currently in walking window</p>
-                            )}
-                          </div>
-
-                          {/* SRS Queue */}
-                          <div>
-                            <h5 className="text-xl font-bold text-black mb-3">
-                              SRS Queue ({walkingWindow.srs_queue?.length || 0})
-                            </h5>
-                            {walkingWindow.srs_queue && walkingWindow.srs_queue.length > 0 ? (
-                              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-                                {walkingWindow.srs_queue.map((word, idx) => (
-                                  <div
-                                    key={idx}
-                                    className="bg-purple-50 border-2 border-purple-200 rounded-lg p-4"
-                                  >
-                                    <div className="font-bold text-lg text-black mb-1">
-                                      {word.foreign}
-                                    </div>
-                                    <div className="text-gray-700 mb-2">{word.english}</div>
-                                    <div className="text-sm text-gray-600">
-                                      Seen: {word.count_seen} | 
-                                      Correct: {word.count_correct} | 
-                                      Wrong: {word.count_incorrect}
-                                    </div>
-                                  </div>
-                                ))}
-                              </div>
-                            ) : (
-                              <p className="text-gray-600">No words in SRS queue</p>
-                            )}
-                          </div>
-                        </>
-                      )}
-                    </div>
-                  )}
                 </div>
               ))}
             </div>
@@ -324,6 +203,7 @@ export default function ClassroomDetailsPage() {
             </p>
           </div>
         )}
+        </>
       </div>
     </div>
   );

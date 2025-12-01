@@ -111,6 +111,15 @@ export default function ReviewPage() {
     await api.getTTS(flashword.foreign, settings.language);
   };
 
+  const getBackPath = () => {
+    const assignmentMode = localStorage.getItem('assignmentMode');
+    if (assignmentMode === 'true') {
+      const assignmentId = localStorage.getItem('assignmentId');
+      return assignmentId ? `/assignment-study/${assignmentId}` : '/my-classroom';
+    }
+    return '/menu';
+  };
+
   if (!flashword && !feedback) {
     return <div className="min-h-screen bg-[#fdf3dd] flex items-center justify-center">
       <div className="text-4xl text-black">Loading...</div>
@@ -120,7 +129,7 @@ export default function ReviewPage() {
   return (
     <div className="min-h-screen bg-[#fdf3dd] p-8">
       <button
-        onClick={() => navigate('/menu')}
+        onClick={() => navigate(getBackPath())}
         className="absolute top-4 left-4 bg-[#d9534f] text-white px-6 py-3 rounded-xl text-xl font-bold hover:bg-[#c9433f] transition"
       >
         BACK

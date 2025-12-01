@@ -8,6 +8,8 @@ export default function MyClassroomPage() {
   const [classrooms, setClassrooms] = useState([]);
   const [leaderboards, setLeaderboards] = useState({});
   const [studentStats, setStudentStats] = useState({});
+  const [assignments, setAssignments] = useState({});
+  const [assignmentProgress, setAssignmentProgress] = useState({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
@@ -72,6 +74,38 @@ export default function MyClassroomPage() {
           }
         }
         setStudentStats(statsResults);
+        
+        // Load assignments for each classroom
+        const assignmentsResults = {};
+        const progressResults = {};
+        for (const classroom of classroomsList) {
+          const code = classroom.classroom_code;
+          try {
+            const assignmentsResult = await api.getClassroomAssignments(code);
+            if (assignmentsResult.success) {
+              assignmentsResults[code] = assignmentsResult.assignments || [];
+              
+              // Load progress for each assignment
+              for (const assignment of assignmentsResults[code]) {
+                try {
+                  const progressResult = await api.getStudentAssignmentProgress(assignment.assignment_id, email);
+                  if (progressResult.success) {
+                    if (!progressResults[code]) {
+                      progressResults[code] = {};
+                    }
+                    progressResults[code][assignment.assignment_id] = progressResult;
+                  }
+                } catch (err) {
+                  console.error(`Failed to load progress for assignment ${assignment.assignment_id}:`, err);
+                }
+              }
+            }
+          } catch (err) {
+            console.error(`Failed to load assignments for ${code}:`, err);
+          }
+        }
+        setAssignments(assignmentsResults);
+        setAssignmentProgress(progressResults);
       } else {
         setError(classroomsResult.error || 'Failed to load classrooms');
       }
@@ -188,6 +222,66 @@ export default function MyClassroomPage() {
                       </div>
                     </div>
                   </div>
+
+                  {/* Assignments */}
+                  {assignments[code] && assignments[code].length > 0 && (
+                    <div className="mb-6">
+                      <h3 className="text-3xl font-bold text-black mb-4">Assignments</h3>
+                      <div className="space-y-4">
+                        {assignments[code].map((assignment) => {
+                          const progress = assignmentProgress[code]?.[assignment.assignment_id];
+                          const completion = progress?.completion_percentage || 0;
+                          const status = completion === 100 ? 'completed' : 
+                                       (completion > 0 ? 'in-progress' : 'not-started');
+                          
+                          return (
+                            <div key={assignment.assignment_id} className="bg-gray-50 border-2 border-gray-200 rounded-xl p-6">
+                              <div className="flex justify-between items-start mb-3">
+                                <div>
+                                  <h4 className="text-2xl font-bold text-black">{assignment.assignment_name}</h4>
+                                  <div className="text-sm text-gray-600 mt-1">
+                                    Language: {assignment.language} | Words: {assignment.word_count}
+                                  </div>
+                                </div>
+                                <button
+                                  onClick={() => navigate(`/assignment-study/${assignment.assignment_id}`)}
+                                  className="bg-[#9b59b6] text-white px-6 py-2 rounded-lg text-lg font-bold hover:bg-[#8e44ad] transition"
+                                >
+                                  {status === 'completed' ? 'Review' : status === 'in-progress' ? 'Continue' : 'Start'}
+                                </button>
+                              </div>
+                              
+                              {progress && (
+                                <div>
+                                  <div className="flex justify-between items-center mb-2">
+                                    <span className="text-sm font-semibold text-gray-700">
+                                      Progress: {progress.known_count}/{progress.total_words} words known
+                                    </span>
+                                    <span className="text-sm font-bold text-gray-700">
+                                      {completion.toFixed(1)}%
+                                    </span>
+                                  </div>
+                                  <div className="bg-gray-200 rounded-full h-3">
+                                    <div
+                                      className={`h-3 rounded-full ${
+                                        completion === 100 ? 'bg-green-500' : 'bg-blue-500'
+                                      }`}
+                                      style={{ width: `${completion}%` }}
+                                    ></div>
+                                  </div>
+                                  <div className="flex gap-4 mt-2 text-xs text-gray-600">
+                                    <span>Known: {progress.known_count}</span>
+                                    <span>In Progress: {progress.in_progress_count}</span>
+                                    <span>Not Started: {progress.not_started_count}</span>
+                                  </div>
+                                </div>
+                              )}
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  )}
 
                   {/* Leaderboard */}
                   {leaderboard.length > 0 && (

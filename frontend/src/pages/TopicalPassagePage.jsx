@@ -62,13 +62,22 @@ export default function TopicalPassagePage() {
     }
   };
 
+  const getBackPath = () => {
+    const assignmentMode = localStorage.getItem('assignmentMode');
+    if (assignmentMode === 'true') {
+      const assignmentId = localStorage.getItem('assignmentId');
+      return assignmentId ? `/assignment-study/${assignmentId}` : '/my-classroom';
+    }
+    return '/guided-reading';
+  };
+
   const boldedText = passage ? boldCurrentWords(passage, currentWords) : '';
   const passageElements = passage ? parseBoldedText(boldedText) : null;
 
   return (
     <div className="min-h-screen bg-[#fdf3dd] p-8">
       <button
-        onClick={() => navigate('/guided-reading')}
+          onClick={() => navigate(getBackPath())}
         className="absolute top-4 left-4 bg-[#d9534f] text-white px-6 py-3 rounded-xl text-xl font-bold hover:bg-[#c9433f] transition"
       >
         BACK

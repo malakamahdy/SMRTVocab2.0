@@ -2,14 +2,47 @@ from flask import Blueprint, request, jsonify
 import csv
 import os
 import sys
+import shutil
+import logging
 sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 from utils import settings
 from models.walking_window import WalkingWindow
+
+logging.basicConfig(level=logging.INFO)
 
 bp = Blueprint('classroom_stats', __name__, url_prefix='/api/classroom-stats')
 
 MEMBERS_CSV = 'ClassroomMembers.csv'
 CLASSROOMS_CSV = 'Classrooms.csv'
+
+def ensure_user_csv_initialized(student_email, language):
+    """Ensure a user's CSV file is initialized from template if it's empty or doesn't exist."""
+    user_file = f"UserWords/{student_email}_{language}.csv"
+    template_file = f"UserWords/Template_{language}.csv"
+    
+    # If file doesn't exist, copy from template
+    if not os.path.exists(user_file):
+        if os.path.exists(template_file):
+            shutil.copy(template_file, user_file)
+            return True
+        return False
+    
+    # If file exists but is empty (only header), initialize from template
+    try:
+        with open(user_file, 'r', encoding='utf-8') as f:
+            reader = csv.DictReader(f)
+            row_count = sum(1 for row in reader)
+            if row_count == 0:  # Only header, no data rows
+                if os.path.exists(template_file):
+                    shutil.copy(template_file, user_file)
+                    return True
+    except Exception:
+        # If there's an error reading, try to initialize from template
+        if os.path.exists(template_file):
+            shutil.copy(template_file, user_file)
+            return True
+    
+    return False
 
 def get_student_stats(student_email):
     """
@@ -21,29 +54,54 @@ def get_student_stats(student_email):
     total_incorrect = 0
     total_seen = 0
     
+    # Normalize email (strip whitespace)
+    student_email = student_email.strip()
+    
     # Aggregate stats from all language CSV files
     for lang in settings.LANGUAGE_OPTIONS:
+        # Ensure CSV is initialized if empty
+        ensure_user_csv_initialized(student_email, lang)
+        
         user_file = f"UserWords/{student_email}_{lang}.csv"
         if os.path.exists(user_file):
             try:
+                row_count = 0
+                words_with_progress = 0
                 with open(user_file, 'r', encoding='utf-8') as f:
                     reader = csv.DictReader(f)
                     for row in reader:
+                        # Skip empty rows
+                        foreign_word = row.get('Foreign', '').strip()
+                        if not foreign_word:
+                            continue
+                        
+                        row_count += 1
+                            
                         try:
-                            seen = int(row.get('seen', 0))
-                            correct = int(row.get('correct', 0))
-                            wrong = int(row.get('wrong', 0))
-                            known = bool(int(row.get('known', 0)))
+                            seen = int(row.get('seen', 0) or 0)
+                            correct = int(row.get('correct', 0) or 0)
+                            wrong = int(row.get('wrong', 0) or 0)
+                            known = bool(int(row.get('known', 0) or 0))
+                            
+                            if seen > 0 or correct > 0 or wrong > 0 or known:
+                                words_with_progress += 1
                             
                             total_seen += seen
                             total_correct += correct
                             total_incorrect += wrong
                             if known:
                                 total_known += 1
-                        except (ValueError, KeyError):
+                        except (ValueError, KeyError, TypeError) as e:
+                            # Log the error for debugging but continue processing
+                            logging.warning(f"Error processing row for {student_email} {lang}: {e}, row: {row}")
                             continue
-            except Exception:
+                
+                logging.info(f"Stats for {student_email} {lang}: {row_count} words, {words_with_progress} with progress, known={total_known}, seen={total_seen}")
+            except Exception as e:
+                logging.error(f"Error reading {user_file} for {student_email}: {e}")
                 continue
+        else:
+            logging.warning(f"CSV file not found: {user_file} for {student_email}")
     
     # Calculate accuracy percentage
     total_attempts = total_correct + total_incorrect
@@ -72,11 +130,13 @@ def get_classroom_students(classroom_code):
     students = []
     instructor_email = get_classroom_instructor(classroom_code)
     if os.path.exists(MEMBERS_CSV):
-        with open(MEMBERS_CSV, 'r') as f:
+        with open(MEMBERS_CSV, 'r', encoding='utf-8') as f:
             reader = csv.DictReader(f)
             for row in reader:
                 student_email = row.get('student_email', '').strip()
-                if (row.get('classroom_code', '').strip().upper() == classroom_code.strip().upper() and
+                classroom_code_row = row.get('classroom_code', '').strip().upper()
+                if (classroom_code_row == classroom_code.strip().upper() and
+                    student_email and
                     student_email != instructor_email):
                     students.append(student_email)
     return students
@@ -214,6 +274,9 @@ def get_student_walking_window(code, email):
     # For now, let's use the default language from settings
     language = request.args.get('language', settings.LANGUAGE)
     
+    # Ensure CSV is initialized if empty
+    ensure_user_csv_initialized(email, language)
+    
     # Temporarily set the username and language for the walking window
     original_username = settings.username
     original_language = settings.LANGUAGE
@@ -280,6 +343,9 @@ def get_student_all_words(code, email, language):
     if language not in settings.LANGUAGE_OPTIONS:
         return jsonify({'error': 'Invalid language!'}), 400
     
+    # Ensure CSV is initialized if empty
+    ensure_user_csv_initialized(email, language)
+    
     user_file = f"UserWords/{email}_{language}.csv"
     
     known_words = []
@@ -291,6 +357,10 @@ def get_student_all_words(code, email, language):
             with open(user_file, 'r', encoding='utf-8') as f:
                 reader = csv.DictReader(f)
                 for row in reader:
+                    # Skip empty rows
+                    if not row.get('Foreign', '').strip():
+                        continue
+                        
                     try:
                         foreign = row.get('Foreign', '').strip()
                         english = row.get('English', '').strip()
@@ -337,4 +407,80 @@ def get_student_all_words(code, email, language):
         'total_known': len(known_words),
         'total_learning': len(learning_words),
         'total_struggling': len(struggling_words)
+    })
+
+@bp.route('/student/<code>/<email>/wordlist-stats/<language>', methods=['GET'])
+def get_student_wordlist_stats(code, email, language):
+    """Get student progress stats compared to the entire wordlist CSV for a specific language."""
+    if not code or not email or not language:
+        return jsonify({'error': 'Classroom code, student email, and language are required!'}), 400
+    
+    code = code.strip().upper()
+    email = email.strip()
+    
+    # Verify student is in classroom
+    students = get_classroom_students(code)
+    if email not in students:
+        return jsonify({'error': 'Student is not a member of this classroom!'}), 404
+    
+    if language not in settings.LANGUAGE_OPTIONS:
+        return jsonify({'error': 'Invalid language!'}), 400
+    
+    # Ensure CSV is initialized if empty
+    ensure_user_csv_initialized(email, language)
+    
+    # Count total words in the template wordlist
+    template_file = f"UserWords/Template_{language}.csv"
+    total_wordlist_words = 0
+    
+    if os.path.exists(template_file):
+        try:
+            with open(template_file, 'r', encoding='utf-8') as f:
+                reader = csv.DictReader(f)
+                total_wordlist_words = sum(1 for row in reader if row.get('Foreign', '').strip())
+        except Exception as e:
+            return jsonify({'error': f'Failed to read template wordlist: {str(e)}'}), 500
+    else:
+        return jsonify({'error': f'Template wordlist for {language} not found!'}), 404
+    
+    # Get student's word stats for this language
+    user_file = f"UserWords/{email}_{language}.csv"
+    student_known = 0
+    student_total = 0
+    student_seen = 0
+    
+    if os.path.exists(user_file):
+        try:
+            with open(user_file, 'r', encoding='utf-8') as f:
+                reader = csv.DictReader(f)
+                for row in reader:
+                    # Skip empty rows
+                    if not row.get('Foreign', '').strip():
+                        continue
+                        
+                    try:
+                        seen = int(row.get('seen', 0))
+                        known = bool(int(row.get('known', 0)))
+                        
+                        student_total += 1
+                        student_seen += seen
+                        if known:
+                            student_known += 1
+                    except (ValueError, KeyError):
+                        continue
+        except Exception as e:
+            return jsonify({'error': f'Failed to read student word data: {str(e)}'}), 500
+    
+    # Calculate progress percentage
+    progress_percentage = (student_known / total_wordlist_words * 100) if total_wordlist_words > 0 else 0
+    
+    return jsonify({
+        'success': True,
+        'language': language,
+        'total_wordlist_words': total_wordlist_words,
+        'student_known': student_known,
+        'student_total_in_csv': student_total,
+        'student_seen': student_seen,
+        'progress_percentage': round(progress_percentage, 2),
+        'words_remaining': total_wordlist_words - student_known
     })

@@ -16,6 +16,9 @@ import ClassroomDetailsPage from './pages/ClassroomDetailsPage'
 import JoinClassroomPage from './pages/JoinClassroomPage'
 import MyClassroomPage from './pages/MyClassroomPage'
 import StudentProgressPage from './pages/StudentProgressPage'
+import CreateAssignmentPage from './pages/CreateAssignmentPage'
+import AssignmentStudyPage from './pages/AssignmentStudyPage'
+import AssignmentsPage from './pages/AssignmentsPage'
 
 function App() {
   return (
@@ -35,6 +38,9 @@ function App() {
       <Route path="/about" element={<AboutPage />} />
       <Route path="/manage-classrooms" element={<ManageClassroomsPage />} />
       <Route path="/classroom/:code" element={<ClassroomDetailsPage />} />
+      <Route path="/classroom/:code/assignments" element={<AssignmentsPage />} />
+      <Route path="/classroom/:code/create-assignment" element={<CreateAssignmentPage />} />
+      <Route path="/assignment-study/:assignmentId" element={<AssignmentStudyPage />} />
       <Route path="/student-progress/:code/:studentEmail" element={<StudentProgressPage />} />
       <Route path="/join-classroom" element={<JoinClassroomPage />} />
       <Route path="/my-classroom" element={<MyClassroomPage />} />

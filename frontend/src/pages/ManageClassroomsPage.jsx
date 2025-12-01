@@ -124,12 +124,20 @@ export default function ManageClassroomsPage() {
                 </button>
               </p>
             </div>
-            <button
-              onClick={backToClassrooms}
-              className="bg-[#0f606b] text-white px-6 py-3 rounded-xl text-xl font-bold hover:bg-[#0a4a52] transition"
-            >
-              Back to Classrooms
-            </button>
+            <div className="flex gap-4">
+              <button
+                onClick={() => navigate(`/classroom/${selectedClassroom.classroom_code}/assignments`)}
+                className="bg-[#2ecc71] text-white px-6 py-3 rounded-xl text-xl font-bold hover:bg-[#27ae60] transition"
+              >
+                Assignments
+              </button>
+              <button
+                onClick={backToClassrooms}
+                className="bg-[#0f606b] text-white px-6 py-3 rounded-xl text-xl font-bold hover:bg-[#0a4a52] transition"
+              >
+                Back to Classrooms
+              </button>
+            </div>
           </div>
 
           {error && (
@@ -180,8 +188,8 @@ export default function ManageClassroomsPage() {
                           'border-gray-200 bg-white'
                         }`}
                       >
-                        <div className="flex justify-between items-start flex-wrap gap-4">
-                          <div className="flex items-center gap-4 flex-1">
+                        <div className="flex justify-between items-center">
+                          <div className="flex items-center gap-4">
                             <div className={`text-4xl font-bold ${
                               index === 0 ? 'text-yellow-600' :
                               index === 1 ? 'text-gray-600' :
@@ -190,23 +198,28 @@ export default function ManageClassroomsPage() {
                             }`}>
                               #{student.rank}
                             </div>
-                            <div className="flex-1">
-                              <h3 className="text-2xl font-bold text-black mb-2">{student.student_email}</h3>
-                              <div className="flex gap-4 text-lg text-gray-700 mb-2">
+                            <div>
+                              <h3 className="text-2xl font-bold text-black">{student.student_email}</h3>
+                              <div className="flex gap-4 mt-2 text-lg text-gray-700">
                                 <span>Words Known: <strong>{student.total_known}</strong></span>
                                 <span>Accuracy: <strong>{student.accuracy.toFixed(1)}%</strong></span>
                               </div>
-                              <div className="text-sm text-gray-600">
-                                Correct: <strong>{student.total_correct}</strong> | Wrong: <strong>{student.total_incorrect}</strong> | Total Attempts: {student.total_seen}
-                              </div>
                             </div>
                           </div>
-                          <button
-                            onClick={() => navigate(`/student-progress/${selectedClassroom.classroom_code}/${student.student_email}`)}
-                            className="bg-[#9b59b6] text-white px-8 py-4 rounded-lg text-xl font-bold hover:bg-[#8e44ad] transition shadow-lg whitespace-nowrap"
-                          >
-                            View student progress
-                          </button>
+                          <div className="flex flex-col items-end gap-3">
+                            <div className="text-lg text-gray-600 text-right">
+                              <div>Correct: <strong>{student.total_correct}</strong> | Wrong: <strong>{student.total_incorrect}</strong></div>
+                              <div className="text-sm text-gray-500 mt-1">
+                                Total Attempts: {student.total_seen}
+                              </div>
+                            </div>
+                            <button
+                              onClick={() => navigate(`/student-progress/${selectedClassroom.classroom_code}/${student.student_email}`)}
+                              className="bg-[#9b59b6] text-white px-8 py-4 rounded-lg text-xl font-bold hover:bg-[#8e44ad] transition shadow-lg whitespace-nowrap"
+                            >
+                              View student progress
+                            </button>
+                          </div>
                         </div>
                       </div>
                     ))}

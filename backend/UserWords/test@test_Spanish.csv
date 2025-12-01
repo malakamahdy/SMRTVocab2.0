@@ -81,15 +81,15 @@ pasa,happens,0,0,0,1
 siempre,always,0,0,0,1
 otra,other,0,0,0,1
 uno,one,0,0,0,1
-estoy,am,0,0,0,1
+estoy,am,0,0,0,0
 quiero,I want,0,0,0,1
 estar,to be,0,0,0,1
 están,they are,0,0,0,1
 hasta,until,0,0,0,1
 estaba,I was,0,0,0,1
-sin,without,0,0,0,1
+sin,without,0,0,0,0
 gracias,Thank you,0,0,0,1
-él,he,1,1,0,1
+él,he,0,0,0,1
 quién,who,0,0,0,1
 vida,life,0,0,0,1
 dónde,where,0,0,0,1
@@ -102,115 +102,115 @@ ni,neither,0,0,0,1
 solo,only,0,0,0,1
 nunca,never,0,0,0,1
 verdad,TRUE,0,0,0,1
-nosotros,us,0,0,0,1
+nosotros,us,0,0,0,0
 tres,three,0,0,0,1
-estás,you are,0,0,0,1
+estás,you are,0,0,0,0
 puedo,Can I,0,0,0,1
 ir,to go,0,0,0,1
-tener,to have,0,0,0,1
+tener,to have,0,0,0,0
 tu,your,0,0,0,1
-gente,people,0,0,0,1
+gente,people,0,0,0,0
 decir,tell,0,0,0,1
-estamos,we're,0,0,0,1
-mis,my,0,0,0,1
+estamos,we're,0,0,0,0
+mis,my,0,0,0,0
 soy,am,0,0,0,1
-entonces,then,0,0,0,1
+entonces,then,0,0,0,0
 casa,House,0,0,0,1
-después,after,0,0,0,1
+después,after,0,0,0,0
 poco,little bit,0,0,0,1
 favor,favour,0,0,0,1
 tan,so,0,0,0,1
-nadie,no one,0,0,0,1
+nadie,no one,0,0,0,0
 antes,before,0,0,0,1
-años,years,0,0,0,1
-vas,you go,0,0,0,1
-van,they go,0,0,0,1
-mismo,same,0,0,0,1
-hoy,today,0,0,0,1
-desde,since,0,0,0,1
-quiere,wants,0,0,0,1
+años,years,0,0,0,0
+vas,you go,0,0,0,0
+van,they go,0,0,0,0
+mismo,same,0,0,0,0
+hoy,today,0,0,0,0
+desde,since,0,0,0,0
+quiere,wants,0,0,0,0
 sus,their,0,0,0,1
 toda,all,0,0,0,1
-cosa,thing,0,0,0,1
-sea,be,0,0,0,1
-momento,moment,0,0,0,1
-menos,less,0,0,0,1
-cuenta,bill,0,0,0,1
-da,gives,0,0,0,1
-ella,she,0,0,0,1
+cosa,thing,0,0,0,0
+sea,be,0,0,0,0
+momento,moment,0,0,0,0
+menos,less,0,0,0,0
+cuenta,bill,0,0,0,0
+da,gives,0,0,0,0
+ella,she,0,0,0,0
 claro,Sure,0,0,0,1
-mañana,morning,0,0,0,1
-días,days,0,0,0,1
-unos,some,0,0,0,1
-sabe,knows,0,0,0,1
-dije,I said,0,0,0,1
-dice,He says,0,0,0,1
-tenía,I had,0,0,0,1
-ha,he has,0,0,0,1
-hablar,speak,0,0,0,1
-parece,It seems,0,0,0,1
-gusta,like,0,0,0,1
-alguien,someone,0,0,0,1
-quería,wanted,0,0,0,1
-muchas,many,0,0,0,1
-donde,where,0,0,0,1
-había,there was,0,0,0,1
-mundo,world,0,0,0,1
-tanto,so much,0,0,0,1
-pasó,I pass,0,0,0,1
-salir,leave,0,0,0,1
-veces,times,0,0,0,1
-viene,comes,0,0,0,1
-todas,all,0,0,0,1
-dar,to give,0,0,0,1
+mañana,morning,0,0,0,0
+días,days,0,0,0,0
+unos,some,0,0,0,0
+sabe,knows,0,0,0,0
+dije,I said,0,0,0,0
+dice,He says,0,0,0,0
+tenía,I had,0,0,0,0
+ha,he has,0,0,0,0
+hablar,speak,0,0,0,0
+parece,It seems,0,0,0,0
+gusta,like,0,0,0,0
+alguien,someone,0,0,0,0
+quería,wanted,0,0,0,0
+muchas,many,0,0,0,0
+donde,where,0,0,0,0
+había,there was,0,0,0,0
+mundo,world,0,0,0,0
+tanto,so much,0,0,0,0
+pasó,I pass,0,0,0,0
+salir,leave,0,0,0,0
+veces,times,0,0,0,0
+viene,comes,0,0,0,0
+todas,all,0,0,0,0
+dar,to give,0,0,0,0
 tal,such,0,0,0,0
 hecho,done,0,0,0,0
-pasar,spend,0,0,0,1
+pasar,spend,0,0,0,0
 noche,night,0,0,0,0
 igual,Same,0,0,0,0
 estos,these,0,0,0,0
-cada,each,0,0,0,1
-haciendo,making,0,0,0,1
-iba,I was going,0,0,0,1
+cada,each,0,0,0,0
+haciendo,making,0,0,0,0
+iba,I was going,0,0,0,0
 hombre,men,0,0,0,0
-saber,to know,0,0,0,1
+saber,to know,0,0,0,0
 podemos,can,0,0,0,0
-tienen,have,0,0,0,1
+tienen,have,0,0,0,0
 tú,your,0,0,0,0
-hola,hello,0,0,0,1
-madre,mother,0,0,0,1
+hola,hello,0,0,0,0
+madre,mother,0,0,0,0
 trabajo,worked,0,0,0,0
-fuera,outside,0,0,0,1
+fuera,outside,0,0,0,0
 mira,look,0,0,0,0
-dijo,said,0,0,0,1
+dijo,said,0,0,0,0
 digo,say,0,0,0,0
 tus,your,0,0,0,0
-buena,good,0,0,0,1
-seguro,sure,0,0,0,1
-mal,wrong,0,0,0,1
-ellos,they,0,0,0,1
-casi,almost,0,0,0,1
-entre,Come in,0,0,0,1
-conmigo,with me,0,0,0,1
-único,unique,0,0,0,1
-veo,I see,0,0,0,1
-hora,hour,0,0,0,1
+buena,good,0,0,0,0
+seguro,sure,0,0,0,0
+mal,wrong,0,0,0,0
+ellos,they,0,0,0,0
+casi,almost,0,0,0,0
+entre,Come in,0,0,0,0
+conmigo,with me,0,0,0,0
+único,unique,0,0,0,0
+veo,I see,0,0,0,0
+hora,hour,0,0,0,0
 cinco,five,0,0,0,0
-siento,I feel,0,0,0,1
-dejar,let,0,0,0,1
-todavía,yet,0,0,0,1
+siento,I feel,0,0,0,0
+dejar,let,0,0,0,0
+todavía,yet,0,0,0,0
 haber,to have,0,0,0,0
-falta,lack,0,0,0,1
+falta,lack,0,0,0,0
 hijo,son,0,0,0,0
-ve,go,0,0,0,1
+ve,go,0,0,0,0
 tampoco,either,0,0,0,0
-parte,part,0,0,0,1
+parte,part,0,0,0,0
 llegar,get,0,0,0,0
-cuatro,four,0,0,0,1
+cuatro,four,0,0,0,0
 eh,Hey,0,0,0,0
-sabes,you know,0,0,0,1
+sabes,you know,0,0,0,0
 he,He,0,0,0,0
-venir,to come,0,0,0,1
+venir,to come,0,0,0,0
 somos,are,0,0,0,0
 ah,ah,0,0,0,0
 familia,family,0,0,0,0
@@ -554,7 +554,7 @@ dejo,left,0,0,0,0
 entender,to understand,0,0,0,0
 e,and,0,0,0,0
 siete,seven,0,0,0,0
-adiós, goodbye,0,0,0,0
+adiós,goodbye,0,0,0,0
 foto,Photo,0,0,0,0
 dijeron,They said,0,0,0,0
 dan,give,0,0,0,0
@@ -3237,7 +3237,7 @@ muchísima,a lot,0,0,0,0
 revista,magazine,0,0,0,0
 lleves,take,0,0,0,0
 insoportable,unbearable,0,0,0,0
-cuchillo,knife,0,0,0,0
+cuchillo,knife,11,10,1,1
 mapa,map,0,0,0,0
 ideal,ideal,0,0,0,0
 conociste,you met,0,0,0,0
@@ -4862,13 +4862,13 @@ bobo,fool,0,0,0,0
 agentes,agents,0,0,0,0
 pastel,cake,0,0,0,0
 muévete,move,0,0,0,0
-ratón, mouse,0,0,0,0
+ratón,mouse,0,0,0,0
 computadora,computer,0,0,0,0
 cruzados,crusaders,0,0,0,0
 londres,London,0,0,0,0
 corra,run,0,0,0,0
 ricas,rich,0,0,0,0
-coja,take ,0,0,0,0
+coja,take,0,0,0,0
 secuestrado,kidnapped,0,0,0,0
 micrófono,microphone,0,0,0,0
 protegiendo,protecting,0,0,0,0
@@ -4998,3 +4998,5 @@ tomate,take,0,0,0,0
 entiendan,understand,0,0,0,0
 cruel,cruel,0,0,0,0
 abandonada,abandoned,0,0,0,0
+tenedor,fork,5,3,2,1
+cuchara,spoon,3,3,0,1

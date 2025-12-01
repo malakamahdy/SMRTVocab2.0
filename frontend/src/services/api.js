@@ -45,7 +45,11 @@ export const api = {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ session_id: sessionId, flashword, answer })
     });
-    return response.json();
+    const data = await response.json();
+    if (!response.ok) {
+      return { error: data.error || 'Failed to check answer' };
+    }
+    return data;
   },
   
   markKnown: async (sessionId, flashword) => {
@@ -325,6 +329,65 @@ export const api = {
 
   getStudentAllWords: async (code, email, language) => {
     const response = await fetch(`${API_BASE_URL}/classroom-stats/student/${encodeURIComponent(code)}/${encodeURIComponent(email)}/all-words/${encodeURIComponent(language)}`);
+    return response.json();
+  },
+
+  getStudentWordlistStats: async (code, email, language) => {
+    const response = await fetch(`${API_BASE_URL}/classroom-stats/student/${encodeURIComponent(code)}/${encodeURIComponent(email)}/wordlist-stats/${encodeURIComponent(language)}`);
+    return response.json();
+  },
+
+  // Classroom Assignments
+  createAssignment: async (classroomCode, assignmentName, instructorEmail, language, words) => {
+    const response = await fetch(`${API_BASE_URL}/classroom-assignments/create`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        classroom_code: classroomCode,
+        assignment_name: assignmentName,
+        instructor_email: instructorEmail,
+        language: language,
+        words: words
+      })
+    });
+    return response.json();
+  },
+
+  getClassroomAssignments: async (classroomCode) => {
+    const response = await fetch(`${API_BASE_URL}/classroom-assignments/classroom/${encodeURIComponent(classroomCode)}`);
+    return response.json();
+  },
+
+  getAssignmentDetails: async (assignmentId) => {
+    const response = await fetch(`${API_BASE_URL}/classroom-assignments/${encodeURIComponent(assignmentId)}`);
+    return response.json();
+  },
+
+  deleteAssignment: async (assignmentId, instructorEmail) => {
+    const response = await fetch(`${API_BASE_URL}/classroom-assignments/${encodeURIComponent(assignmentId)}`, {
+      method: 'DELETE',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ instructor_email: instructorEmail })
+    });
+    return response.json();
+  },
+
+  getAssignmentStats: async (assignmentId) => {
+    const response = await fetch(`${API_BASE_URL}/classroom-assignments/${encodeURIComponent(assignmentId)}/stats`);
+    return response.json();
+  },
+
+  getStudentAssignmentProgress: async (assignmentId, studentEmail) => {
+    const response = await fetch(`${API_BASE_URL}/classroom-assignments/${encodeURIComponent(assignmentId)}/progress/${encodeURIComponent(studentEmail)}`);
+    return response.json();
+  },
+
+  initAssignmentStudy: async (username, language, assignmentId) => {
+    const response = await fetch(`${API_BASE_URL}/study/init`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ username, language, assignment_id: assignmentId })
+    });
     return response.json();
   }
 };
