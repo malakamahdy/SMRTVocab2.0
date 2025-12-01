@@ -253,6 +253,15 @@ export const api = {
     return response.json();
   },
 
+  generateFillInTheBlank: async (sessionId) => {
+    const response = await fetch(`${API_BASE_URL}/reading/fill-in-the-blank`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ session_id: sessionId })
+    });
+    return response.json();
+  },
+
   // Classrooms
   createClassroom: async (name, instructorEmail) => {
     const response = await fetch(`${API_BASE_URL}/classrooms/create`, {

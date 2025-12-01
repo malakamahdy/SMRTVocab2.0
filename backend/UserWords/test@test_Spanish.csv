@@ -74,7 +74,7 @@ fue,it was,0,0,0,1
 puede,can,0,0,0,1
 todos,everybody,0,0,0,1
 era,it was,0,0,0,1
-hace,does,0,0,0,0
+hace,does,0,0,0,1
 les,them,0,0,0,1
 va,goes,0,0,0,1
 pasa,happens,0,0,0,1
@@ -161,7 +161,7 @@ pasó,I pass,0,0,0,1
 salir,leave,0,0,0,1
 veces,times,0,0,0,1
 viene,comes,0,0,0,1
-todas,all,0,0,0,0
+todas,all,0,0,0,1
 dar,to give,0,0,0,1
 tal,such,0,0,0,0
 hecho,done,0,0,0,0
@@ -187,30 +187,30 @@ digo,say,0,0,0,0
 tus,your,0,0,0,0
 buena,good,0,0,0,1
 seguro,sure,0,0,0,1
-mal,wrong,0,0,0,0
+mal,wrong,0,0,0,1
 ellos,they,0,0,0,1
-casi,almost,0,0,0,0
+casi,almost,0,0,0,1
 entre,Come in,0,0,0,1
 conmigo,with me,0,0,0,1
-único,unique,0,0,0,0
-veo,I see,0,0,0,0
-hora,hour,0,0,0,0
+único,unique,0,0,0,1
+veo,I see,0,0,0,1
+hora,hour,0,0,0,1
 cinco,five,0,0,0,0
-siento,I feel,0,0,0,0
-dejar,let,0,0,0,0
-todavía,yet,0,0,0,0
+siento,I feel,0,0,0,1
+dejar,let,0,0,0,1
+todavía,yet,0,0,0,1
 haber,to have,0,0,0,0
 falta,lack,0,0,0,1
 hijo,son,0,0,0,0
-ve,go,0,0,0,0
+ve,go,0,0,0,1
 tampoco,either,0,0,0,0
-parte,part,0,0,0,0
+parte,part,0,0,0,1
 llegar,get,0,0,0,0
-cuatro,four,0,0,0,0
+cuatro,four,0,0,0,1
 eh,Hey,0,0,0,0
-sabes,you know,0,0,0,0
+sabes,you know,0,0,0,1
 he,He,0,0,0,0
-venir,to come,0,0,0,0
+venir,to come,0,0,0,1
 somos,are,0,0,0,0
 ah,ah,0,0,0,0
 familia,family,0,0,0,0

@@ -10,6 +10,7 @@ import AboutPage from './pages/AboutPage'
 import GuidedReadingModePage from './pages/GuidedReadingModePage'
 import ShortStoryPage from './pages/ShortStoryPage'
 import TopicalPassagePage from './pages/TopicalPassagePage'
+import FillInTheBlankPage from './pages/FillInTheBlankPage'
 import ManageClassroomsPage from './pages/ManageClassroomsPage'
 import ClassroomDetailsPage from './pages/ClassroomDetailsPage'
 import JoinClassroomPage from './pages/JoinClassroomPage'
@@ -28,6 +29,7 @@ function App() {
       <Route path="/guided-reading" element={<GuidedReadingModePage />} />
       <Route path="/guided-reading/short-story" element={<ShortStoryPage />} />
       <Route path="/guided-reading/topical-passage" element={<TopicalPassagePage />} />
+      <Route path="/guided-reading/fill-in-the-blank" element={<FillInTheBlankPage />} />
       <Route path="/stats" element={<StatsPage />} />
       <Route path="/settings" element={<SettingsPage />} />
       <Route path="/about" element={<AboutPage />} />

@@ -31,6 +31,13 @@ export default function GuidedReadingModePage() {
           >
             Topical Passage Mode
           </button>
+          
+          <button
+            onClick={() => navigate('/guided-reading/fill-in-the-blank')}
+            className="w-full bg-[#e67e22] text-white py-6 rounded-2xl text-4xl font-bold hover:bg-[#d35400] transition"
+          >
+            Fill in the Blank Mode
+          </button>
         </div>
       </div>
     </div>
