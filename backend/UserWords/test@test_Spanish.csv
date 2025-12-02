@@ -127,7 +127,7 @@ vas,you go,0,0,0,0
 van,they go,0,0,0,0
 mismo,same,0,0,0,0
 hoy,today,0,0,0,0
-desde,since,0,0,0,0
+desde,since,1,1,0,0
 quiere,wants,0,0,0,0
 sus,their,0,0,0,1
 toda,all,0,0,0,1
@@ -3237,7 +3237,7 @@ muchísima,a lot,0,0,0,0
 revista,magazine,0,0,0,0
 lleves,take,0,0,0,0
 insoportable,unbearable,0,0,0,0
-cuchillo,knife,11,10,1,1
+cuchillo,knife,13,12,1,1
 mapa,map,0,0,0,0
 ideal,ideal,0,0,0,0
 conociste,you met,0,0,0,0
@@ -4998,5 +4998,5 @@ tomate,take,0,0,0,0
 entiendan,understand,0,0,0,0
 cruel,cruel,0,0,0,0
 abandonada,abandoned,0,0,0,0
-tenedor,fork,5,3,2,1
-cuchara,spoon,3,3,0,1
+tenedor,fork,6,4,2,1
+cuchara,spoon,8,8,0,1
