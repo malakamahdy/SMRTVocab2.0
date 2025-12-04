@@ -1,4 +1,0 @@
-assignment_id,student_email,word_foreign,word_english,count_seen,count_correct,count_incorrect,is_known,last_updated
-3c536fdd-51c0-4af2-9f3d-bb6a61de3e80,test@test,cuchillo,knife,13,12,1,1,2025-12-01 21:07:21
-3c536fdd-51c0-4af2-9f3d-bb6a61de3e80,test@test,tenedor,fork,6,4,2,1,2025-12-01 21:07:21
-3c536fdd-51c0-4af2-9f3d-bb6a61de3e80,test@test,cuchara,spoon,8,8,0,1,2025-12-01 21:07:21
