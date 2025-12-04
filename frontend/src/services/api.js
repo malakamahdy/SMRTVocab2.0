@@ -1,23 +1,61 @@
-const API_BASE_URL = 'http://localhost:5000/api';
+// Use environment variable for API URL, fallback to localhost for development
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api';
+const API_BASE_HOST = import.meta.env.VITE_API_BASE_URL?.replace('/api', '') || 'http://localhost:5000';
+
+// Log API URL in development or if not configured (for debugging)
+if (import.meta.env.DEV || !import.meta.env.VITE_API_BASE_URL) {
+  console.log('API Base URL:', API_BASE_URL);
+  if (!import.meta.env.VITE_API_BASE_URL) {
+    console.warn('⚠️ VITE_API_BASE_URL not set! Using default localhost. This will not work when deployed to Firebase.');
+  }
+}
 
 export const api = {
   // Auth
   login: async (email, password) => {
-    const response = await fetch(`${API_BASE_URL}/auth/login`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email, password })
-    });
-    return response.json();
+    try {
+      const response = await fetch(`${API_BASE_URL}/auth/login`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password })
+      });
+      
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({ error: `HTTP ${response.status}: ${response.statusText}` }));
+        return { error: errorData.error || `Server error: ${response.status}` };
+      }
+      
+      return await response.json();
+    } catch (error) {
+      console.error('Login API error:', error);
+      if (error.message?.includes('Failed to fetch')) {
+        return { error: 'Cannot connect to backend server. Please check your connection and ensure the backend is deployed.' };
+      }
+      throw error;
+    }
   },
   
   register: async (email, password, role) => {
-    const response = await fetch(`${API_BASE_URL}/auth/register`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email, password, role })
-    });
-    return response.json();
+    try {
+      const response = await fetch(`${API_BASE_URL}/auth/register`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password, role })
+      });
+      
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({ error: `HTTP ${response.status}: ${response.statusText}` }));
+        return { error: errorData.error || `Server error: ${response.status}` };
+      }
+      
+      return await response.json();
+    } catch (error) {
+      console.error('Register API error:', error);
+      if (error.message?.includes('Failed to fetch')) {
+        return { error: 'Cannot connect to backend server. Please check your connection and ensure the backend is deployed.' };
+      }
+      throw error;
+    }
   },
   
   // Study
@@ -132,7 +170,7 @@ export const api = {
       
       // If successful, play the audio
       if (result.success && result.audio_url) {
-        const audioUrl = `http://localhost:5000${result.audio_url}`;
+        const audioUrl = `${API_BASE_HOST}${result.audio_url}`;
         console.log('Playing audio from URL:', audioUrl);
         
         const audio = new Audio(audioUrl);

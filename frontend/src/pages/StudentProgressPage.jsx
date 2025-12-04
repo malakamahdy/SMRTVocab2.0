@@ -229,6 +229,7 @@ export default function StudentProgressPage() {
             <option value="Japanese">Japanese</option>
             <option value="Mandarin">Mandarin</option>
             <option value="Hieroglyphic">Hieroglyphic</option>
+            <option value="TokiPona">TokiPona</option>
           </select>
         </div>
 

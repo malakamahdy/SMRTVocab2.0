@@ -7,4 +7,6 @@ numpy==1.26.2
 matplotlib==3.8.2
 google-genai
 python-dotenv==1.0.0
+gunicorn==21.2.0
+werkzeug==3.0.1
 

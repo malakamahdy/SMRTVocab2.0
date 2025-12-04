@@ -52,7 +52,8 @@ def get_language_name_for_prompt(language):
         'Arabic': 'Arabic',
         'Japanese': 'Japanese',
         'Mandarin': 'Mandarin',
-        'Hieroglyphic': 'Ancient Egyptian Hieroglyphic'
+        'Hieroglyphic': 'Ancient Egyptian Hieroglyphic',
+        'TokiPona': 'Toki Pona'
     }
     return language_map.get(language, language)
 

@@ -27,7 +27,13 @@ export default function LoginPage() {
         navigate('/menu');
       }
     } catch (err) {
-      setError('An error occurred. Please try again.');
+      console.error('Login error:', err);
+      // Check if it's a network error (backend not accessible)
+      if (err.message?.includes('Failed to fetch') || err.message?.includes('NetworkError') || err.name === 'TypeError') {
+        setError('Cannot connect to server. Please check if the backend is deployed and running.');
+      } else {
+        setError(err.message || 'An error occurred. Please try again.');
+      }
     }
   };
 

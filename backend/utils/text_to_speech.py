@@ -19,10 +19,17 @@ import re
 # Get the backend directory (one level up from utils)
 BACKEND_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 BASE_AUDIO_DIR = os.path.join(BACKEND_DIR, "audio_files")
-LANGUAGES = {"english": "en", "spanish": "es", "french": "fr", "arabic": "ar", "japanese": "ja", "mandarin": "zh"}
+LANGUAGES = {"english": "en", "spanish": "es", "french": "fr", "arabic": "ar", "japanese": "ja", "mandarin": "zh", "tokipona": "en"}
 
-# Initialize pygame mixer
-pygame.mixer.init()
+# Initialize pygame mixer (handle environments without audio devices like Cloud Run)
+_pygame_mixer_available = False
+try:
+    pygame.mixer.init()
+    _pygame_mixer_available = True
+except Exception as e:
+    # In environments without audio (like Cloud Run), pygame mixer init will fail
+    # This is okay - audio playback won't work but the app can still generate audio files
+    logging.warning(f"Pygame mixer initialization failed (this is expected in serverless environments): {e}")
 
 # Ensure lang-specific directories exist
 for language in LANGUAGES:
@@ -70,6 +77,9 @@ def generate_pronunciation(word, lang):
 
 def play_audio_async(file_path):
     """Play audio file asynchronously."""
+    if not _pygame_mixer_available:
+        logging.info("Audio playback not available (no audio device)")
+        return
     try:
         pygame.mixer.music.load(file_path)
         pygame.mixer.music.set_volume(settings.VOLUME/100)

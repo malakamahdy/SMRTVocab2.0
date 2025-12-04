@@ -23,28 +23,44 @@ def word_to_dict(word):
 
 @bp.route('/init', methods=['POST'])
 def init_study():
-    data = request.json
-    username = data.get('username')
-    language = data.get('language', settings.LANGUAGE)
-    assignment_id = data.get('assignment_id')  # Optional: for assignment mode
-    
-    settings.username = username
-    settings.LANGUAGE = language
-    
-    if assignment_id:
-        # Assignment mode
-        session_id = f"{username}_{language}_assignment_{assignment_id}"
-        sessions[session_id] = WalkingWindow(
-            size=settings.WALKING_WINDOW_SIZE,
-            assignment_id=assignment_id,
-            student_email=username
-        )
-    else:
-        # Normal mode
-        session_id = f"{username}_{language}"
-        sessions[session_id] = WalkingWindow(size=settings.WALKING_WINDOW_SIZE)
-    
-    return jsonify({'success': True, 'session_id': session_id})
+    try:
+        data = request.json
+        username = data.get('username')
+        language = data.get('language', settings.LANGUAGE)
+        assignment_id = data.get('assignment_id')  # Optional: for assignment mode
+        
+        if not username:
+            return jsonify({'error': 'Username is required'}), 400
+        
+        settings.username = username
+        settings.LANGUAGE = language
+        
+        if assignment_id:
+            # Assignment mode
+            session_id = f"{username}_{language}_assignment_{assignment_id}"
+            sessions[session_id] = WalkingWindow(
+                size=settings.WALKING_WINDOW_SIZE,
+                assignment_id=assignment_id,
+                student_email=username
+            )
+        else:
+            # Normal mode
+            session_id = f"{username}_{language}"
+            sessions[session_id] = WalkingWindow(size=settings.WALKING_WINDOW_SIZE)
+        
+        return jsonify({'success': True, 'session_id': session_id})
+    except FileNotFoundError as e:
+        import logging
+        logging.error(f"File not found in init_study: {str(e)}")
+        return jsonify({'error': str(e)}), 404
+    except ValueError as e:
+        import logging
+        logging.error(f"Value error in init_study: {str(e)}")
+        return jsonify({'error': str(e)}), 400
+    except Exception as e:
+        import logging
+        logging.error(f"Error in init_study: {str(e)}", exc_info=True)
+        return jsonify({'error': f'Failed to initialize study session: {str(e)}'}), 500
 
 @bp.route('/random-words', methods=['POST'])
 def get_random_words():

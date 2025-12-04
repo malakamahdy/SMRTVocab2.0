@@ -1,0 +1,25 @@
+# This file specifies files that are *not* uploaded to Google Cloud
+# using gcloud. It follows the same syntax as .gitignore
+
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+.venv/
+.git/
+.gitignore
+*.md
+README.md
+# Exclude user data CSVs but keep templates
+UserWords/*.csv
+!UserWords/Template_*.csv
+AccountInformation.csv
+Classrooms.csv
+ClassroomMembers.csv
+ClassroomAssignments.csv
+ClassroomAssignmentWords.csv
+ClassroomAssignmentProgress.csv
+

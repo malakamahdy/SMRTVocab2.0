@@ -25,7 +25,8 @@ def get_tts():
         'Arabic': 'arabic',
         'Japanese': 'japanese',
         'Mandarin': 'mandarin',
-        'Hieroglyphic': 'english'  # Fallback for hieroglyphic
+        'Hieroglyphic': 'english',  # Fallback for hieroglyphic
+        'TokiPona': 'tokipona'
     }
     lang = lang_map.get(language, language.lower())
     

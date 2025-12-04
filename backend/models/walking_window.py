@@ -53,17 +53,47 @@ class WalkingWindow:
         param: csv_name : the filepath of the user's CSV
         return: words_dict : a dictionary containing all the user's word data
         """
-
-        csv_file = open(f"UserWords/{csv_name}", encoding = 'utf-8')
-        reader = csv.DictReader(csv_file)
+        csv_path = f"UserWords/{csv_name}"
         words_dict = dict()
+        
+        # Check if file exists
+        if not os.path.exists(csv_path):
+            logging.error(f"CSV file not found: {csv_path}")
+            raise FileNotFoundError(f"User word list not found: {csv_name}. Please ensure you have logged in and your word list has been initialized.")
+        
+        # Check if file is empty or only has header
+        file_size = os.path.getsize(csv_path)
+        if file_size < 50:  # Very small file, likely only header
+            logging.warning(f"CSV file appears empty or corrupted: {csv_path} (size: {file_size} bytes)")
+            # Try to copy from template if available
+            language = settings.LANGUAGE
+            template_path = f"UserWords/Template_{language}.csv"
+            if os.path.exists(template_path) and os.path.getsize(template_path) > 50:
+                logging.info(f"Attempting to restore from template: {template_path}")
+                import shutil
+                try:
+                    shutil.copy(template_path, csv_path)
+                    logging.info(f"Restored {csv_name} from template")
+                except Exception as e:
+                    logging.error(f"Failed to restore from template: {e}")
+                    raise FileNotFoundError(f"User word list is empty and could not be restored from template. Please contact support.")
+            else:
+                raise FileNotFoundError(f"User word list is empty: {csv_name}. Please ensure you have logged in and your word list has been initialized.")
+        
+        csv_file = open(csv_path, encoding = 'utf-8')
+        reader = csv.DictReader(csv_file)
         # i = 1
         for row in reader:
             # logging.info(f"Reading row {i} of {csv_name}: {row}")
             # i += 1
             try:
-                foreign = row["Foreign"]
-                engl = row["English"]
+                foreign = row.get("Foreign", "").strip()
+                engl = row.get("English", "").strip()
+                
+                # Skip empty rows
+                if not foreign or not engl:
+                    continue
+                
                 seen = int(row.get("seen", 0) or 0)
                 correct = int(row.get("correct", 0) or 0)
                 wrong = int(row.get("wrong", 0) or 0)
@@ -90,7 +120,13 @@ class WalkingWindow:
                 logging.warning(f"Error reading row from {csv_name}: {e}")
                 pass
         csv_file.close()
-        logging.info(f"{csv_name} loaded into dictionary.")
+        
+        # Check if we actually loaded any words
+        if len(words_dict) == 0:
+            logging.error(f"No words loaded from {csv_name}. File may be empty or corrupted.")
+            raise ValueError(f"No words found in {csv_name}. The word list appears to be empty.")
+        
+        logging.info(f"{csv_name} loaded into dictionary with {len(words_dict)} words.")
         return words_dict
     
     def assignment_to_words_dict(self, assignment_id: str, student_email: str):

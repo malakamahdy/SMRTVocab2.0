@@ -1,0 +1,22 @@
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+.venv/
+.git
+.gitignore
+README.md
+*.md
+# Exclude user data CSVs but keep templates
+UserWords/*.csv
+!UserWords/Template_*.csv
+AccountInformation.csv
+Classrooms.csv
+ClassroomMembers.csv
+ClassroomAssignments.csv
+ClassroomAssignmentWords.csv
+ClassroomAssignmentProgress.csv
+

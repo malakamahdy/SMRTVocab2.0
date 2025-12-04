@@ -29,6 +29,9 @@ backend/UserWords/*_*.csv
 !backend/UserWords/Template_*.csv
 backend/Classrooms.csv
 backend/ClassroomMembers.csv
+backend/ClassroomAssignmentProgress.csv
+backend/ClassroomAssignments.csv
+backend/ClassroomAssignmentWords.csv
 
 # Generated audio files
 backend/audio_files/**/*.mp3
@@ -53,6 +56,7 @@ frontend/node_modules/
 frontend/.next/
 frontend/out/
 frontend/.vite/
+frontend/dist/
 
 # Environment variables
 .env
@@ -61,6 +65,11 @@ frontend/.vite/
 .env.test.local
 .env.production.local
 backend/.env
+frontend/.env.production
+backend/temp-env-vars.txt
+
+# Temporary files
+frontend/remove.txt
 
 # SMRT-PROJECT (if it's a submodule or shouldn't be committed)
 # Uncomment if needed:

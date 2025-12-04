@@ -112,7 +112,7 @@ tu,your,0,0,0,1
 gente,people,0,0,0,0
 decir,tell,0,0,0,1
 estamos,we're,0,0,0,0
-mis,my,0,0,0,0
+mis,my,1,1,0,0
 soy,am,0,0,0,1
 entonces,then,0,0,0,0
 casa,House,0,0,0,1
@@ -131,8 +131,8 @@ desde,since,1,1,0,0
 quiere,wants,0,0,0,0
 sus,their,0,0,0,1
 toda,all,0,0,0,1
-cosa,thing,0,0,0,0
-sea,be,0,0,0,0
+cosa,thing,1,1,0,0
+sea,be,1,1,0,0
 momento,moment,0,0,0,0
 menos,less,0,0,0,0
 cuenta,bill,0,0,0,0
